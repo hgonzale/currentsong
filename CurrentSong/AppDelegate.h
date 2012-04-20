@@ -8,9 +8,12 @@
 
 #import <Cocoa/Cocoa.h>
 #import <Foundation/Foundation.h>
+#import "../iTunes.h"
 
 @interface AppDelegate : NSObject <NSApplicationDelegate> {
   NSStatusItem *statusItem;
+  iTunesApplication *iTunes;
+  NSMutableAttributedString *title;
 }
 // @property (assign) IBOutlet NSWindow *window;
 

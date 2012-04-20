@@ -7,6 +7,7 @@
 //
 
 #import "AppDelegate.h"
+#import "../iTunes.h"
 
 @implementation AppDelegate
 
@@ -14,39 +15,66 @@
 
 - (void)dealloc
 {
+  [title release];
+  [iTunes release];
   [statusItem release];
   [super dealloc];
 }
 
-- (void)awakeFromNib
+- (IBAction)updateTitle:(id)sender
 {
-  statusItem = [[[NSStatusBar systemStatusBar] 
-                 statusItemWithLength:NSVariableStatusItemLength]
-                retain];
-  [statusItem setHighlightMode:YES];
-  [statusItem setTitle:[NSString 
-                        stringWithString:@"0.0.0.0"]]; 
-  [statusItem setEnabled:YES];
-  [statusItem setToolTip:@"CSongMenulet"];
-  
-  [statusItem setAction:@selector(updateIPAddress:)];
-  [statusItem setTarget:self];
+  if( [iTunes isRunning] )
+  {
+    NSString *songTitle = [[iTunes currentTrack] name];
+    if( songTitle != NULL )
+    {
+      //[statusItem setAttributedTitle:[NSString stringWithString:songTitle]];
+      [title beginEditing];
+      [title replaceCharactersInRange:NSMakeRange( 0, [title length] ) 
+                           withString:songTitle ];
+      [title endEditing];
+    }
+    else
+    {
+      //[statusItem setAttributedTitle:[NSString stringWithString:@"No Track"]];
+      [title beginEditing];
+      [title replaceCharactersInRange:NSMakeRange( 0, [title length] ) 
+                           withString:@"PY" ];
+      [title endEditing];
+    }
+    [statusItem setAttributedTitle:title];
+  }
+  else
+  {
+    [statusItem setAttributedTitle:[NSString stringWithString:@"No iTunes"]];
+  }
 }
 
-- (IBAction)updateIPAddress:(id)sender
+- (void)awakeFromNib
 {
-  NSString *ipAddr = [NSString stringWithContentsOfURL:
-                      [NSURL URLWithString:
-                       @"http://highearthorbit.com/service/myip.php"]];
-  if(ipAddr != NULL)
-    [statusItem setTitle:
-     [NSString stringWithString:ipAddr]]; 
+  statusItem = [[NSStatusBar systemStatusBar] statusItemWithLength:NSVariableStatusItemLength];
+  [statusItem retain];
+  [statusItem setHighlightMode:NO];
+  [statusItem setEnabled:YES];
+  [statusItem setToolTip:@"CSongMenulet"];  
+  [statusItem setAction:@selector(updateTitle:)];
+  [statusItem setTarget:self];
+
+  iTunes = [SBApplication applicationWithBundleIdentifier:@"com.apple.iTunes"];
+  [iTunes retain];
+  
+  NSFont *font = [NSFont fontWithName:@"Geneva" size:10.0];
+  NSDictionary *attrsDictionary = [NSDictionary dictionaryWithObject:font 
+                                                              forKey:NSFontAttributeName];
+  title = [[NSMutableAttributedString alloc] initWithString:@"Hola" 
+                                                 attributes:attrsDictionary];
+  
+  [statusItem setAttributedTitle:title];
 }
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification
 {
   // Insert code here to initialize your application
-  [self updateIPAddress:nil];
 }
 
 @end

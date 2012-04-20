@@ -12,7 +12,7 @@
 		0AAC5CCA1539515700F9558D /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 0AAC5CC91539515700F9558D /* main.m */; };
 		0AAC5CCE1539515700F9558D /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 0AAC5CCC1539515700F9558D /* Credits.rtf */; };
 		0AAC5CD11539515700F9558D /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 0AAC5CD01539515700F9558D /* AppDelegate.m */; };
-		0AAC5CD41539515700F9558D /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0AAC5CD21539515700F9558D /* MainMenu.xib */; };
+		0AB0F84A153FE3F600AE4F6D /* ScriptingBridge.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0AB0F849153FE3F600AE4F6D /* ScriptingBridge.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -28,8 +28,8 @@
 		0AAC5CCD1539515700F9558D /* en */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = en; path = en.lproj/Credits.rtf; sourceTree = "<group>"; };
 		0AAC5CCF1539515700F9558D /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		0AAC5CD01539515700F9558D /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
-		0AAC5CD31539515700F9558D /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/MainMenu.xib; sourceTree = "<group>"; };
 		0AB0F847153FE0FC00AE4F6D /* iTunes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = iTunes.h; sourceTree = "<group>"; };
+		0AB0F849153FE3F600AE4F6D /* ScriptingBridge.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = ScriptingBridge.framework; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -38,6 +38,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				0AAC5CBE1539515700F9558D /* Cocoa.framework in Frameworks */,
+				0AB0F84A153FE3F600AE4F6D /* ScriptingBridge.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -68,6 +69,7 @@
 		0AAC5CBC1539515700F9558D /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				0AB0F849153FE3F600AE4F6D /* ScriptingBridge.framework */,
 				0AAC5CBD1539515700F9558D /* Cocoa.framework */,
 				0AAC5CBF1539515700F9558D /* Other Frameworks */,
 			);
@@ -89,7 +91,6 @@
 			children = (
 				0AAC5CCF1539515700F9558D /* AppDelegate.h */,
 				0AAC5CD01539515700F9558D /* AppDelegate.m */,
-				0AAC5CD21539515700F9558D /* MainMenu.xib */,
 				0AAC5CC41539515700F9558D /* Supporting Files */,
 			);
 			path = CurrentSong;
@@ -159,7 +160,6 @@
 			files = (
 				0AAC5CC81539515700F9558D /* InfoPlist.strings in Resources */,
 				0AAC5CCE1539515700F9558D /* Credits.rtf in Resources */,
-				0AAC5CD41539515700F9558D /* MainMenu.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -192,14 +192,6 @@
 				0AAC5CCD1539515700F9558D /* en */,
 			);
 			name = Credits.rtf;
-			sourceTree = "<group>";
-		};
-		0AAC5CD21539515700F9558D /* MainMenu.xib */ = {
-			isa = PBXVariantGroup;
-			children = (
-				0AAC5CD31539515700F9558D /* en */,
-			);
-			name = MainMenu.xib;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
@@ -255,6 +247,10 @@
 		0AAC5CD81539515700F9558D /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)\"",
+				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "CurrentSong/CurrentSong-Prefix.pch";
 				INFOPLIST_FILE = "CurrentSong/CurrentSong-Info.plist";
@@ -266,6 +262,10 @@
 		0AAC5CD91539515700F9558D /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)\"",
+				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "CurrentSong/CurrentSong-Prefix.pch";
 				INFOPLIST_FILE = "CurrentSong/CurrentSong-Info.plist";
