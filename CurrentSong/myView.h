@@ -8,16 +8,31 @@
 
 #import <Cocoa/Cocoa.h>
 
+typedef enum {
+  PLAYING,
+  PAUSED,
+  STOPPED,
+  UNKNOWN
+} iTunesState;
+
 @interface myView : NSView {
   NSString *name;
   NSString *album;
   NSString *artist;
   NSDictionary *fontAttr;
+  iTunesState state;
+
+@private
+  NSBezierPath *stop;
+  NSBezierPath *play;
+  NSBezierPath *pause;
 }
 
 @property (retain) NSString *name;
 @property (retain) NSString *album;
 @property (retain) NSString *artist;
 @property (retain) NSDictionary *fontAttr;
+@property iTunesState state;
+
 
 @end

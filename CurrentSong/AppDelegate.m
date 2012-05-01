@@ -25,52 +25,42 @@
 - (void)updateTitle:(NSNotification *)iTunesNotification
 {
   NSString *playerState = nil;
-  iTunesState state = UNKNOWN;
   NSDictionary *userInfo = [iTunesNotification userInfo];
-  // NSMutableString *title_ = nil;
   
   playerState = [userInfo objectForKey:@"Player State"];
   
-  // title_ = [NSMutableString stringWithString:[userInfo objectForKey:@"Name"]];
-  // [title_ appendString:@"\n"];
-  // [title_ appendString:[userInfo objectForKey:@"Artist"]];
-  
-  // [title beginEditing];
-  // [title replaceCharactersInRange:NSMakeRange( 0, [title length] ) 
-  //                      withString:title_];
-  // [title endEditing];  
-
   [view setName:[userInfo objectForKey:@"Name"]];
   [view setArtist:[userInfo objectForKey:@"Artist"]];
   [view setAlbum:[userInfo objectForKey:@"Album"]];
   
   if( [playerState isEqualToString:@"Stopped"] )
   {
-    state = STOPPED;
+    [view setState:STOPPED];
   }
   else if( [playerState isEqualToString:@"Playing"] )
   {
-    state = PLAYING;
+    [view setState:PLAYING];
   }
   else if( [playerState isEqualToString:@"Paused"] )
   {
-    state = PAUSED;
+    [view setState:PAUSED];
   }
   else
   {
-    state = UNKNOWN;
+    [view setState:UNKNOWN];
   }
-  //[statusItem setAttributedTitle:title];
   [view setNeedsDisplay:YES];
 }
 
 - (void)awakeFromNib
 {
+  iTunes = [SBApplication applicationWithBundleIdentifier:@"com.apple.iTunes"];
+  [iTunes retain];
+  
   statusItem = [[NSStatusBar systemStatusBar] statusItemWithLength:LENGTH];
   [statusItem retain];
   [statusItem setHighlightMode:NO];
   [statusItem setEnabled:YES];
-  [statusItem setToolTip:@"CSongMenulet"];
   [statusItem setAction:@selector(updateTitle:)];
   [statusItem setTarget:self];
   
@@ -79,18 +69,25 @@
                                                   [statusItem length],
                                                   [[NSStatusBar systemStatusBar] thickness])
           ];
+
+  if( [iTunes isRunning] )
+  {
+    [view setName:[[iTunes currentTrack] name]];
+    [view setArtist:[[iTunes currentTrack] artist]];
+    [view setAlbum:[[iTunes currentTrack] album]];
+  }
+  else
+  {
+    [view setName:@"iTunes not running"];
+  }
+  
   [statusItem setView:view];
 
-  // iTunes = [SBApplication applicationWithBundleIdentifier:@"com.apple.iTunes"];
-  // [iTunes retain];
-  
   // NSFont *font = [NSFont fontWithName:@"Geneva" size:8.0];
   // NSDictionary *attrsDictionary = [NSDictionary dictionaryWithObject:font 
   //                                                             forKey:NSFontAttributeName];
   // title = [[NSMutableAttributedString alloc] initWithString:@"-" 
   //                                                attributes:attrsDictionary];
-  
-  // [statusItem setAttributedTitle:title];
   
   [[NSDistributedNotificationCenter defaultCenter] addObserver:self
                                                       selector:@selector(updateTitle:)

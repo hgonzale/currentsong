@@ -11,18 +11,10 @@
 #import "../iTunes.h"
 #import "myView.h"
 
-typedef enum {
-  PLAYING,
-  PAUSED,
-  STOPPED,
-  UNKNOWN
-} iTunesState;
-
 @interface AppDelegate : NSObject <NSApplicationDelegate> {
   NSStatusItem *statusItem;
   iTunesApplication *iTunes;
   myView *view;
-  // NSMutableAttributedString *title;
 }
 
 // @property (assign) IBOutlet NSWindow *window;
