@@ -15,6 +15,7 @@
   NSStatusItem *statusItem;
   iTunesApplication *iTunes;
   myView *view;
+  NSTimer *timer;
 }
 
 // @property (assign) IBOutlet NSWindow *window;

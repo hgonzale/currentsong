@@ -12,6 +12,7 @@ typedef enum {
   PLAYING,
   PAUSED,
   STOPPED,
+  NOTRUNNING,
   UNKNOWN
 } iTunesState;
 
@@ -26,6 +27,10 @@ typedef enum {
   NSBezierPath *stop;
   NSBezierPath *play;
   NSBezierPath *pause;
+  CGFloat topBias;
+  CGFloat bottomBias;
+  CGFloat topLength;
+  CGFloat bottomLength;
 }
 
 @property (retain) NSString *name;
@@ -34,5 +39,7 @@ typedef enum {
 @property (retain) NSDictionary *fontAttr;
 @property iTunesState state;
 
+- (void)updateBias;
+- (void)updateLength;
 
 @end

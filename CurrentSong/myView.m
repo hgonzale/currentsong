@@ -8,6 +8,11 @@
 
 #import "myView.h"
 
+#define BOTTOMSEP 6.0
+#define TOPHEIGHT 9.0
+#define BOTTOMHEIGHT -1.0
+#define BIASINC -1.0
+
 @implementation myView
 
 @synthesize name;
@@ -56,30 +61,70 @@
   [play setLineWidth:1.0];
   [play retain];
   
+  topBias = 0.0;
+  bottomBias = 0.0;
+  topLength = 0.0;
+  bottomLength = 0.0;
+  
   return self;
+}
+
+- (void)updateLength
+{
+  switch(state)
+  {
+    case STOPPED:
+    case PLAYING:
+    case PAUSED:
+      topLength = 12 + [name sizeWithAttributes:fontAttr].width; // Magic number!
+      break;
+    default:
+      topLength = [name sizeWithAttributes:fontAttr].width;
+  }
+  bottomLength = [album sizeWithAttributes:fontAttr].width + [artist sizeWithAttributes:fontAttr].width + BOTTOMSEP;
+}
+
+- (void)updateBias
+{
+  topBias = topBias + BIASINC;
+  bottomBias = bottomBias + BIASINC;
 }
 
 - (void)drawRect:(NSRect)dirtyRect
 {
-  // [[NSColor selectedMenuItemColor] set];
-  // NSRectFill(dirtyRect);
+  CGFloat artistLen;
 
-  switch(state){
+  artistLen = [artist sizeWithAttributes:fontAttr].width + BOTTOMSEP;
+  
+  switch(state)
+  {
     case STOPPED:
       [stop fill];
+      [name drawAtPoint:NSMakePoint(12,TOPHEIGHT) withAttributes:fontAttr];
+      [artist drawAtPoint:NSMakePoint(0,BOTTOMHEIGHT) withAttributes:fontAttr];
+      [album drawAtPoint:NSMakePoint(artistLen,BOTTOMHEIGHT) withAttributes:fontAttr];
       break;
     case PLAYING:
       [play fill];
+      [name drawAtPoint:NSMakePoint(12,TOPHEIGHT) withAttributes:fontAttr];
+      [artist drawAtPoint:NSMakePoint(0,BOTTOMHEIGHT) withAttributes:fontAttr];
+      [album drawAtPoint:NSMakePoint(artistLen,BOTTOMHEIGHT) withAttributes:fontAttr];
       break;
     case PAUSED:
       [pause fill];
+      [name drawAtPoint:NSMakePoint(12,TOPHEIGHT) withAttributes:fontAttr];
+      [artist drawAtPoint:NSMakePoint(0,BOTTOMHEIGHT) withAttributes:fontAttr];
+      [album drawAtPoint:NSMakePoint(artistLen,BOTTOMHEIGHT) withAttributes:fontAttr];
       break;
-    case UNKNOWN:
-      NSLog(@"Unknown state, don't know what to do...");
+    case NOTRUNNING:
+      [[NSString stringWithString:@"iTunes not running"] drawAtPoint:NSMakePoint(0,5) withAttributes:fontAttr];
       break;
+    default:
+      [[NSString stringWithString:@"Unknown state..."] drawAtPoint:NSMakePoint(0,5) withAttributes:fontAttr];
   }
-  [name drawAtPoint:NSMakePoint(12,9) withAttributes:fontAttr];
-  [artist drawAtPoint:NSMakePoint(0,-1) withAttributes:fontAttr];
+  
+  // [[NSColor selectedMenuItemColor] set];
+  // NSRectFill(dirtyRect);
 }
 
 - (void)dealloc

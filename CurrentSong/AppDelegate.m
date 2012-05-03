@@ -16,13 +16,12 @@
 - (void)dealloc
 {
   [[NSDistributedNotificationCenter defaultCenter] removeObserver:self];
-  // [title release];
   [iTunes release];
   [statusItem release];
   [super dealloc];
 }
 
-- (void)updateTitle:(NSNotification *)iTunesNotification
+- (void)updateSong:(NSNotification *)iTunesNotification
 {
   NSString *playerState = nil;
   NSDictionary *userInfo = [iTunesNotification userInfo];
@@ -49,6 +48,13 @@
   {
     [view setState:UNKNOWN];
   }
+  [view updateLength];
+  [view setNeedsDisplay:YES];
+}
+
+- (void)printBanner:(NSTimer *)theTimer
+{
+  [view updateBias];
   [view setNeedsDisplay:YES];
 }
 
@@ -61,38 +67,51 @@
   [statusItem retain];
   [statusItem setHighlightMode:NO];
   [statusItem setEnabled:YES];
-  [statusItem setAction:@selector(updateTitle:)];
+  // [statusItem setAction:@selector(updateSong:)];
   [statusItem setTarget:self];
   
   view = [[myView alloc] initWithFrame:NSMakeRect(0,
                                                   0,
                                                   [statusItem length],
-                                                  [[NSStatusBar systemStatusBar] thickness])
-          ];
+                                                  [[NSStatusBar systemStatusBar] thickness])];
 
   if( [iTunes isRunning] )
   {
     [view setName:[[iTunes currentTrack] name]];
     [view setArtist:[[iTunes currentTrack] artist]];
     [view setAlbum:[[iTunes currentTrack] album]];
+    switch([iTunes playerState])
+    {
+      case iTunesEPlSPlaying:
+        [view setState:PLAYING];
+        break;
+      case iTunesEPlSPaused:
+        [view setState:PAUSED];
+        break;
+      case iTunesEPlSStopped:
+        [view setState:STOPPED];
+        break;
+      default:
+        // either FastForwarding or Rewinding
+        [view setState:UNKNOWN];
+    }
   }
   else
   {
-    [view setName:@"iTunes not running"];
+    [view setState:NOTRUNNING];
   }
-  
   [statusItem setView:view];
-
-  // NSFont *font = [NSFont fontWithName:@"Geneva" size:8.0];
-  // NSDictionary *attrsDictionary = [NSDictionary dictionaryWithObject:font 
-  //                                                             forKey:NSFontAttributeName];
-  // title = [[NSMutableAttributedString alloc] initWithString:@"-" 
-  //                                                attributes:attrsDictionary];
-  
+    
   [[NSDistributedNotificationCenter defaultCenter] addObserver:self
-                                                      selector:@selector(updateTitle:)
+                                                      selector:@selector(updateSong:)
                                                           name:@"com.apple.iTunes.playerInfo"
                                                         object:nil];
+
+  timer = [NSTimer scheduledTimerWithTimeInterval:0.5
+                                           target:self
+                                         selector:@selector(printBanner:)
+                                         userInfo:nil
+                                          repeats:YES];
 }
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification
