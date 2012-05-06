@@ -8,10 +8,10 @@
 
 #import "AppDelegate.h"
 #define LENGTH 75
+#define BANNERUPDATEINTERVAL 1.0/10.0
+#define ITUNESRUNNINGINTERVAL 2.0
 
 @implementation AppDelegate
-
-// @synthesize window = _window;
 
 - (void)dealloc
 {
@@ -24,41 +24,61 @@
 - (void)updateSong:(NSNotification *)iTunesNotification
 {
   NSString *playerState = nil;
+  iTunesState myState;
   NSDictionary *userInfo = [iTunesNotification userInfo];
   
   playerState = [userInfo objectForKey:@"Player State"];
-  
-  [view setName:[userInfo objectForKey:@"Name"]];
-  [view setArtist:[userInfo objectForKey:@"Artist"]];
-  [view setAlbum:[userInfo objectForKey:@"Album"]];
-  
   if( [playerState isEqualToString:@"Stopped"] )
-  {
-    [view setState:STOPPED];
-  }
+    myState = STOPPED;
   else if( [playerState isEqualToString:@"Playing"] )
-  {
-    [view setState:PLAYING];
-  }
+    myState = PLAYING;
   else if( [playerState isEqualToString:@"Paused"] )
-  {
-    [view setState:PAUSED];
-  }
+    myState = PAUSED;
   else
-  {
-    [view setState:UNKNOWN];
-  }
-  [view updateLength];
-  [view setNeedsDisplay:YES];
+    myState = UNKNOWN;
+
+  [view setName:[userInfo objectForKey:@"Name"]
+      andArtist:[userInfo objectForKey:@"Artist"]
+       andAlbum:[userInfo objectForKey:@"Album"]
+       andState:myState];
 }
 
 - (void)printBanner:(NSTimer *)theTimer
 {
   [view updateBias];
-  [view setNeedsDisplay:YES];
 }
 
-- (void)awakeFromNib
+- (void)checkITunesRunning:(NSTimer *)theTimer
+{
+  iTunesState myState;
+
+  if( [view state] != NOTRUNNING && ![iTunes isRunning] )
+    [view setName:nil andArtist:nil andAlbum:nil andState:NOTRUNNING];
+  else if( [view state] == NOTRUNNING && [iTunes isRunning] )
+  {
+    switch( [iTunes playerState] )
+    {
+      case iTunesEPlSPlaying:
+        myState = PLAYING;
+        break;
+      case iTunesEPlSPaused:
+        myState = PAUSED;
+        break;
+      case iTunesEPlSStopped:
+        myState = STOPPED;
+        break;
+      default:
+        // either FastForwarding or Rewinding
+        myState = UNKNOWN;
+    }
+    [view setName:[[iTunes currentTrack] name]
+        andArtist:[[iTunes currentTrack] artist]
+         andAlbum:[[iTunes currentTrack] album]
+         andState:myState];
+  }
+}
+
+- (void)applicationDidFinishLaunching:(NSNotification *)aNotification
 {
   iTunes = [SBApplication applicationWithBundleIdentifier:@"com.apple.iTunes"];
   [iTunes retain];
@@ -67,56 +87,32 @@
   [statusItem retain];
   [statusItem setHighlightMode:NO];
   [statusItem setEnabled:YES];
-  // [statusItem setAction:@selector(updateSong:)];
-  [statusItem setTarget:self];
   
   view = [[myView alloc] initWithFrame:NSMakeRect(0,
                                                   0,
                                                   [statusItem length],
                                                   [[NSStatusBar systemStatusBar] thickness])];
-
-  if( [iTunes isRunning] )
-  {
-    [view setName:[[iTunes currentTrack] name]];
-    [view setArtist:[[iTunes currentTrack] artist]];
-    [view setAlbum:[[iTunes currentTrack] album]];
-    switch([iTunes playerState])
-    {
-      case iTunesEPlSPlaying:
-        [view setState:PLAYING];
-        break;
-      case iTunesEPlSPaused:
-        [view setState:PAUSED];
-        break;
-      case iTunesEPlSStopped:
-        [view setState:STOPPED];
-        break;
-      default:
-        // either FastForwarding or Rewinding
-        [view setState:UNKNOWN];
-    }
-  }
-  else
-  {
-    [view setState:NOTRUNNING];
-  }
+  
+  [self checkITunesRunning:nil];
+  [view setStatusItem:statusItem];
   [statusItem setView:view];
-    
+  
   [[NSDistributedNotificationCenter defaultCenter] addObserver:self
                                                       selector:@selector(updateSong:)
                                                           name:@"com.apple.iTunes.playerInfo"
                                                         object:nil];
-
-  timer = [NSTimer scheduledTimerWithTimeInterval:0.5
-                                           target:self
-                                         selector:@selector(printBanner:)
-                                         userInfo:nil
-                                          repeats:YES];
-}
-
-- (void)applicationDidFinishLaunching:(NSNotification *)aNotification
-{
-  // Insert code here to initialize your application
+  
+  timerBannerUpdate = [NSTimer scheduledTimerWithTimeInterval:BANNERUPDATEINTERVAL
+                                                       target:self
+                                                     selector:@selector(printBanner:)
+                                                     userInfo:nil
+                                                      repeats:YES];
+  
+  timerITunesRunning = [NSTimer scheduledTimerWithTimeInterval:ITUNESRUNNINGINTERVAL
+                                                        target:self
+                                                      selector:@selector(checkITunesRunning:)
+                                                      userInfo:nil
+                                                       repeats:YES];
 }
 
 @end

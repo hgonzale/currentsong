@@ -14,6 +14,7 @@
 		0AAC5CCE1539515700F9558D /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 0AAC5CCC1539515700F9558D /* Credits.rtf */; };
 		0AAC5CD11539515700F9558D /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 0AAC5CD01539515700F9558D /* AppDelegate.m */; };
 		0AB0F84A153FE3F600AE4F6D /* ScriptingBridge.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0AB0F849153FE3F600AE4F6D /* ScriptingBridge.framework */; };
+		0AF5BB2815565CF8006A1381 /* mainnib.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0AF5BB2715565CF8006A1381 /* mainnib.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -33,6 +34,7 @@
 		0AAC5CD01539515700F9558D /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		0AB0F847153FE0FC00AE4F6D /* iTunes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = iTunes.h; sourceTree = "<group>"; };
 		0AB0F849153FE3F600AE4F6D /* ScriptingBridge.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = ScriptingBridge.framework; sourceTree = "<group>"; };
+		0AF5BB2715565CF8006A1381 /* mainnib.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = mainnib.xib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -97,6 +99,7 @@
 				0AAC5CC41539515700F9558D /* Supporting Files */,
 				0A42C8B51549232400580F05 /* myView.h */,
 				0A42C8B61549232400580F05 /* myView.m */,
+				0AF5BB2715565CF8006A1381 /* mainnib.xib */,
 			);
 			path = CurrentSong;
 			sourceTree = "<group>";
@@ -165,6 +168,7 @@
 			files = (
 				0AAC5CC81539515700F9558D /* InfoPlist.strings in Resources */,
 				0AAC5CCE1539515700F9558D /* Credits.rtf in Resources */,
+				0AF5BB2815565CF8006A1381 /* mainnib.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -207,7 +211,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
 				CLANG_ENABLE_OBJC_ARC = NO;
 				COPY_PHASE_STRIP = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
@@ -225,7 +229,7 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
-				ONLY_ACTIVE_ARCH = NO;
+				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = macosx;
 			};
 			name = Debug;
@@ -234,7 +238,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
 				CLANG_ENABLE_OBJC_ARC = NO;
 				COPY_PHASE_STRIP = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";

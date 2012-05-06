@@ -17,29 +17,40 @@ typedef enum {
 } iTunesState;
 
 @interface myView : NSView {
+  NSDictionary *fontAttr;
+  NSStatusItem *statusItem;
+  
+@private
   NSString *name;
   NSString *album;
   NSString *artist;
-  NSDictionary *fontAttr;
-  iTunesState state;
+  NSString *bottomStr;
 
-@private
+  iTunesState state;
+  
+  int topSkipItersCount;
+  int bottomSkipItersCount;
+  
   NSBezierPath *stop;
   NSBezierPath *play;
   NSBezierPath *pause;
+
+  NSMenu *menu;
+  
   CGFloat topBias;
   CGFloat bottomBias;
   CGFloat topLength;
   CGFloat bottomLength;
 }
 
-@property (retain) NSString *name;
-@property (retain) NSString *album;
-@property (retain) NSString *artist;
+@property (retain) NSStatusItem *statusItem;
 @property (retain) NSDictionary *fontAttr;
-@property iTunesState state;
 
 - (void)updateBias;
-- (void)updateLength;
+- (void)setName:(NSString *)theName 
+      andArtist:(NSString *)theArtist 
+       andAlbum:(NSString *)theAlbum 
+       andState:(iTunesState)theState;
+- (iTunesState)state;
 
 @end
