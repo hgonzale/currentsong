@@ -11,7 +11,6 @@
 		0AAC5CBE1539515700F9558D /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0AAC5CBD1539515700F9558D /* Cocoa.framework */; };
 		0AAC5CC81539515700F9558D /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 0AAC5CC61539515700F9558D /* InfoPlist.strings */; };
 		0AAC5CCA1539515700F9558D /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 0AAC5CC91539515700F9558D /* main.m */; };
-		0AAC5CCE1539515700F9558D /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 0AAC5CCC1539515700F9558D /* Credits.rtf */; };
 		0AAC5CD11539515700F9558D /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 0AAC5CD01539515700F9558D /* AppDelegate.m */; };
 		0AB0F84A153FE3F600AE4F6D /* ScriptingBridge.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0AB0F849153FE3F600AE4F6D /* ScriptingBridge.framework */; };
 		0AF5BB2815565CF8006A1381 /* mainnib.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0AF5BB2715565CF8006A1381 /* mainnib.xib */; };
@@ -20,6 +19,7 @@
 /* Begin PBXFileReference section */
 		0A42C8B51549232400580F05 /* myView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = myView.h; sourceTree = "<group>"; };
 		0A42C8B61549232400580F05 /* myView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = myView.m; sourceTree = "<group>"; };
+		0A72CB5515571F38003BC5AB /* iTunes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = iTunes.h; sourceTree = "<group>"; };
 		0AAC5CB91539515700F9558D /* CurrentSong.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CurrentSong.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		0AAC5CBD1539515700F9558D /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		0AAC5CC01539515700F9558D /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
@@ -29,10 +29,8 @@
 		0AAC5CC71539515700F9558D /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		0AAC5CC91539515700F9558D /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		0AAC5CCB1539515700F9558D /* CurrentSong-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "CurrentSong-Prefix.pch"; sourceTree = "<group>"; };
-		0AAC5CCD1539515700F9558D /* en */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = en; path = en.lproj/Credits.rtf; sourceTree = "<group>"; };
 		0AAC5CCF1539515700F9558D /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		0AAC5CD01539515700F9558D /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
-		0AB0F847153FE0FC00AE4F6D /* iTunes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = iTunes.h; sourceTree = "<group>"; };
 		0AB0F849153FE3F600AE4F6D /* ScriptingBridge.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = ScriptingBridge.framework; sourceTree = "<group>"; };
 		0AF5BB2715565CF8006A1381 /* mainnib.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = mainnib.xib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -53,7 +51,6 @@
 		0AAC5CAE1539515700F9558D = {
 			isa = PBXGroup;
 			children = (
-				0AB0F847153FE0FC00AE4F6D /* iTunes.h */,
 				0AAC5CC31539515700F9558D /* CurrentSong */,
 				0AAC5CBC1539515700F9558D /* Frameworks */,
 				0AAC5CBA1539515700F9558D /* Products */,
@@ -94,6 +91,7 @@
 		0AAC5CC31539515700F9558D /* CurrentSong */ = {
 			isa = PBXGroup;
 			children = (
+				0A72CB5515571F38003BC5AB /* iTunes.h */,
 				0AAC5CCF1539515700F9558D /* AppDelegate.h */,
 				0AAC5CD01539515700F9558D /* AppDelegate.m */,
 				0AAC5CC41539515700F9558D /* Supporting Files */,
@@ -111,7 +109,6 @@
 				0AAC5CC61539515700F9558D /* InfoPlist.strings */,
 				0AAC5CC91539515700F9558D /* main.m */,
 				0AAC5CCB1539515700F9558D /* CurrentSong-Prefix.pch */,
-				0AAC5CCC1539515700F9558D /* Credits.rtf */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -167,7 +164,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				0AAC5CC81539515700F9558D /* InfoPlist.strings in Resources */,
-				0AAC5CCE1539515700F9558D /* Credits.rtf in Resources */,
 				0AF5BB2815565CF8006A1381 /* mainnib.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -194,14 +190,6 @@
 				0AAC5CC71539515700F9558D /* en */,
 			);
 			name = InfoPlist.strings;
-			sourceTree = "<group>";
-		};
-		0AAC5CCC1539515700F9558D /* Credits.rtf */ = {
-			isa = PBXVariantGroup;
-			children = (
-				0AAC5CCD1539515700F9558D /* en */,
-			);
-			name = Credits.rtf;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
