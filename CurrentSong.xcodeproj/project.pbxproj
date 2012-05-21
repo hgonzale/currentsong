@@ -8,17 +8,23 @@
 
 /* Begin PBXBuildFile section */
 		0A42C8B71549232400580F05 /* myView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A42C8B61549232400580F05 /* myView.m */; };
+		0A452F9F156999570069DB31 /* prefMgr.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A452F9E156999570069DB31 /* prefMgr.m */; };
 		0AAC5CBE1539515700F9558D /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0AAC5CBD1539515700F9558D /* Cocoa.framework */; };
 		0AAC5CC81539515700F9558D /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 0AAC5CC61539515700F9558D /* InfoPlist.strings */; };
 		0AAC5CCA1539515700F9558D /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 0AAC5CC91539515700F9558D /* main.m */; };
 		0AAC5CD11539515700F9558D /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 0AAC5CD01539515700F9558D /* AppDelegate.m */; };
 		0AB0F84A153FE3F600AE4F6D /* ScriptingBridge.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0AB0F849153FE3F600AE4F6D /* ScriptingBridge.framework */; };
+		0AC13CEF1558F74900E4C0EF /* aboutWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0AC13CEE1558F74900E4C0EF /* aboutWindow.xib */; };
+		0ACD27E0155E2D170028BADD /* copyright.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 0ACD27DF155E2D170028BADD /* copyright.rtf */; };
+		0ACD27E2155E32D90028BADD /* prefWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0ACD27E1155E32D80028BADD /* prefWindow.xib */; };
 		0AF5BB2815565CF8006A1381 /* mainnib.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0AF5BB2715565CF8006A1381 /* mainnib.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		0A42C8B51549232400580F05 /* myView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = myView.h; sourceTree = "<group>"; };
 		0A42C8B61549232400580F05 /* myView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = myView.m; sourceTree = "<group>"; };
+		0A452F9D156999570069DB31 /* prefMgr.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = prefMgr.h; sourceTree = "<group>"; };
+		0A452F9E156999570069DB31 /* prefMgr.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = prefMgr.m; sourceTree = "<group>"; };
 		0A72CB5515571F38003BC5AB /* iTunes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = iTunes.h; sourceTree = "<group>"; };
 		0AAC5CB91539515700F9558D /* CurrentSong.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CurrentSong.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		0AAC5CBD1539515700F9558D /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
@@ -32,6 +38,9 @@
 		0AAC5CCF1539515700F9558D /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		0AAC5CD01539515700F9558D /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		0AB0F849153FE3F600AE4F6D /* ScriptingBridge.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = ScriptingBridge.framework; sourceTree = "<group>"; };
+		0AC13CEE1558F74900E4C0EF /* aboutWindow.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = aboutWindow.xib; sourceTree = "<group>"; };
+		0ACD27DF155E2D170028BADD /* copyright.rtf */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.rtf; path = copyright.rtf; sourceTree = "<group>"; };
+		0ACD27E1155E32D80028BADD /* prefWindow.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = prefWindow.xib; sourceTree = "<group>"; };
 		0AF5BB2715565CF8006A1381 /* mainnib.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = mainnib.xib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -98,6 +107,10 @@
 				0A42C8B51549232400580F05 /* myView.h */,
 				0A42C8B61549232400580F05 /* myView.m */,
 				0AF5BB2715565CF8006A1381 /* mainnib.xib */,
+				0AC13CEE1558F74900E4C0EF /* aboutWindow.xib */,
+				0ACD27E1155E32D80028BADD /* prefWindow.xib */,
+				0A452F9D156999570069DB31 /* prefMgr.h */,
+				0A452F9E156999570069DB31 /* prefMgr.m */,
 			);
 			path = CurrentSong;
 			sourceTree = "<group>";
@@ -109,6 +122,7 @@
 				0AAC5CC61539515700F9558D /* InfoPlist.strings */,
 				0AAC5CC91539515700F9558D /* main.m */,
 				0AAC5CCB1539515700F9558D /* CurrentSong-Prefix.pch */,
+				0ACD27DF155E2D170028BADD /* copyright.rtf */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -139,7 +153,7 @@
 		0AAC5CB01539515700F9558D /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0420;
+				LastUpgradeCheck = 0430;
 			};
 			buildConfigurationList = 0AAC5CB31539515700F9558D /* Build configuration list for PBXProject "CurrentSong" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -165,6 +179,9 @@
 			files = (
 				0AAC5CC81539515700F9558D /* InfoPlist.strings in Resources */,
 				0AF5BB2815565CF8006A1381 /* mainnib.xib in Resources */,
+				0AC13CEF1558F74900E4C0EF /* aboutWindow.xib in Resources */,
+				0ACD27E0155E2D170028BADD /* copyright.rtf in Resources */,
+				0ACD27E2155E32D90028BADD /* prefWindow.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -178,6 +195,7 @@
 				0AAC5CCA1539515700F9558D /* main.m in Sources */,
 				0AAC5CD11539515700F9558D /* AppDelegate.m in Sources */,
 				0A42C8B71549232400580F05 /* myView.m in Sources */,
+				0A452F9F156999570069DB31 /* prefMgr.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -1,8 +1,8 @@
 //
-//  myView.h
+//  prefMgr.m
 //  CurrentSong
 //
-//  Created by Humberto on 04/25/2012.
+//  Created by Humberto on 05/20/2012.
 //
 //  Copyright (c) 2012, Humberto Gonzalez
 //  All rights reserved.
@@ -27,65 +27,46 @@
 //  POSSIBILITY OF SUCH DAMAGE.
 //
 
-#import <Cocoa/Cocoa.h>
 #import "prefMgr.h"
 
-@protocol hasStatusItem
-- (NSStatusItem *)statusItem;
-@end
+@implementation prefMgr
 
-typedef enum {
-  PLAYING,
-  PAUSED,
-  STOPPED,
-  NOTRUNNING,
-  UNKNOWN
-} iTunesState;
+@synthesize prefWindow;
+@synthesize updateFreqSlider;
+@synthesize widthTField;
+@synthesize delayTField;
+@synthesize sepStrTField;
 
-@interface myView : NSView <hasUpdateParams> {
-  id <hasStatusItem> owner;
+- (id)initWithOwner:(id <hasUpdateParams>)myowner {
+  self = [super init];
   
-@private
-  NSString *name;
-  NSString *album;
-  NSString *artist;
-  NSString *bottomStr;
+  owner = myowner;
+  
+  [NSBundle loadNibNamed:@"prefWindow" owner:self];
+  
+  // Here we should load the saved params.
+  // Instead, I'll read them from the GUI for now
+  
+  params.updateFreq = [updateFreqSlider doubleValue];
+  params.width = [widthTField integerValue];
+  params.delay = [delayTField doubleValue];
+  params.separator = [sepStrTField stringValue];
 
-  iTunesState state;
-  
-  int topSkipItersCount;
-  int bottomSkipItersCount;
-  
-  NSBezierPath *stop;
-  NSBezierPath *play;
-  NSBezierPath *pause;
-
-  NSMenu *menu;
-
-  NSWindowController *about;
-  
-  CGFloat topBias;
-  CGFloat bottomBias;
-  CGFloat topLength;
-  CGFloat bottomLength;
-  
-  NSDictionary *fontAttr;
-  NSWindow *aboutWindow;
-  
-  NSString *separator;
-  int skipIters;
+  return self;
 }
 
-- (id)initWithFrame:(NSRect)frame andOwner:(id <hasStatusItem>)myOwner;
-- (void)updateBias;
-- (void)setName:(NSString *)theName 
-      andArtist:(NSString *)theArtist 
-       andAlbum:(NSString *)theAlbum 
-       andState:(iTunesState)theState;
-- (iTunesState)state;
-- (void)updateParams:(prefParams *)params;
+- (IBAction)updateParams:(id)sender {
 
-@property (retain) NSDictionary *fontAttr;
-@property (assign) IBOutlet NSWindow *aboutWindow;
+  params.updateFreq = [updateFreqSlider doubleValue];
+  params.width = [widthTField integerValue];
+  params.delay = [delayTField doubleValue];
+  params.separator = [sepStrTField stringValue];
+
+  [owner updateParams:&params];
+}
+
+- (void)openWindow:(id)sender{
+  [prefWindow makeKeyAndOrderFront:sender];
+}
 
 @end

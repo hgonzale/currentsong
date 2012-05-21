@@ -31,15 +31,20 @@
 #import <Foundation/Foundation.h>
 #import "iTunes.h"
 #import "myView.h"
+#import "prefMgr.h"
 
-@interface AppDelegate : NSObject <NSApplicationDelegate> {
+@interface AppDelegate : NSObject <NSApplicationDelegate,hasStatusItem,hasUpdateParams> {
   NSStatusItem *statusItem;
   iTunesApplication *iTunes;
   myView *view;
   NSTimer *timerBannerUpdate;
   NSTimer *timerITunesRunning;
   
-  NSWindow *hola;
+  prefMgr *preferences;
 }
+
+- (void)updateParams:(prefParams *)params;
+
+@property (readonly) NSStatusItem *statusItem;
 
 @end

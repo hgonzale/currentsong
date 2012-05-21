@@ -1,8 +1,8 @@
 //
-//  myView.h
+//  prefMgr.h
 //  CurrentSong
 //
-//  Created by Humberto on 04/25/2012.
+//  Created by Humberto on 05/20/2012.
 //
 //  Copyright (c) 2012, Humberto Gonzalez
 //  All rights reserved.
@@ -27,65 +27,39 @@
 //  POSSIBILITY OF SUCH DAMAGE.
 //
 
-#import <Cocoa/Cocoa.h>
-#import "prefMgr.h"
+#import <Foundation/Foundation.h>
 
-@protocol hasStatusItem
-- (NSStatusItem *)statusItem;
+typedef struct {
+  CGFloat width;
+  double delay;
+  NSString *separator;
+  double updateFreq;
+} prefParams;
+
+@protocol hasUpdateParams
+- (void)updateParams:(prefParams *)params;
 @end
 
-typedef enum {
-  PLAYING,
-  PAUSED,
-  STOPPED,
-  NOTRUNNING,
-  UNKNOWN
-} iTunesState;
+@interface prefMgr : NSObject {
+  id <hasUpdateParams> owner;
+  
+  NSWindow *prefWindow;
+  NSSlider *updateFreqSlider;
+  NSTextField *widthTField;
+  NSTextField *delayTField;
+  NSTextField *sepStrTField;
 
-@interface myView : NSView <hasUpdateParams> {
-  id <hasStatusItem> owner;
-  
-@private
-  NSString *name;
-  NSString *album;
-  NSString *artist;
-  NSString *bottomStr;
-
-  iTunesState state;
-  
-  int topSkipItersCount;
-  int bottomSkipItersCount;
-  
-  NSBezierPath *stop;
-  NSBezierPath *play;
-  NSBezierPath *pause;
-
-  NSMenu *menu;
-
-  NSWindowController *about;
-  
-  CGFloat topBias;
-  CGFloat bottomBias;
-  CGFloat topLength;
-  CGFloat bottomLength;
-  
-  NSDictionary *fontAttr;
-  NSWindow *aboutWindow;
-  
-  NSString *separator;
-  int skipIters;
+  prefParams params;
 }
 
-- (id)initWithFrame:(NSRect)frame andOwner:(id <hasStatusItem>)myOwner;
-- (void)updateBias;
-- (void)setName:(NSString *)theName 
-      andArtist:(NSString *)theArtist 
-       andAlbum:(NSString *)theAlbum 
-       andState:(iTunesState)theState;
-- (iTunesState)state;
-- (void)updateParams:(prefParams *)params;
+- (id)initWithOwner:(id)myowner;
+- (IBAction)updateParams:(id)sender;
+- (void)openWindow:(id)sender;
 
-@property (retain) NSDictionary *fontAttr;
-@property (assign) IBOutlet NSWindow *aboutWindow;
+@property (assign) IBOutlet NSWindow *prefWindow;
+@property (assign) IBOutlet NSSlider *updateFreqSlider;
+@property (assign) IBOutlet NSTextField *widthTField;
+@property (assign) IBOutlet NSTextField *delayTField;
+@property (assign) IBOutlet NSTextField *sepStrTField;
 
 @end

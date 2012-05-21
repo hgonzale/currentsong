@@ -29,11 +29,11 @@
 
 #import "myView.h"
 
-#define SYMBOLLENGTH 10.0
-#define TOPHEIGHT 9.0
-#define BOTTOMHEIGHT -1.0
+#define SYMBOLLENGTH 9.0
+#define TOPHEIGHT 10.0
+#define BOTTOMHEIGHT 0.0
 #define ROTATESEP 25.0
-#define BIASINC -1
+#define BIASINC -1.0
 #define SKIPITERS 60
 #define SEPARATOR @" – "
 #define STRNOTRUNNING @"iTunes not running"
@@ -43,16 +43,16 @@
 @implementation myView
 
 @synthesize fontAttr;
-@synthesize statusItem;
+@synthesize aboutWindow;
 
 - (void)menuQuit:(id)sender
 {
   [[NSApplication sharedApplication] terminate:nil];
 }
 
-- (id)initWithFrame:(NSRect)frame
+- (id)initWithFrame:(NSRect)frame andOwner:(id <hasStatusItem>)myOwner
 {
-  NSMenuItem *menuItemQuit;
+  NSMenuItem *menuItemQuit, *menuItemAbout;
   
   self = [super initWithFrame:frame];
   if( !self ) 
@@ -61,12 +61,14 @@
     exit(1);
   }
   
+  owner = myOwner;
+  
   name = nil;
   artist = nil;
   album = nil;
   state = NOTRUNNING;
   [self setFontAttr:[NSDictionary dictionaryWithObject:[NSFont fontWithName:@"Geneva"
-                                                                       size:9]
+                                                                       size:9.0]
                                                 forKey:NSFontAttributeName]];
   
   stop = [NSBezierPath bezierPath];
@@ -91,8 +93,13 @@
   [play setLineWidth:1.0];
   [play retain];
   
+  [NSBundle loadNibNamed:@"aboutWindow" owner:self];
+    
   menu = [[NSMenu alloc] init];
   [menu setAutoenablesItems:NO];
+  menuItemAbout = [menu addItemWithTitle:@"About" action:@selector(makeKeyAndOrderFront:) keyEquivalent:@""];
+  [menuItemAbout setEnabled:YES];
+  [menuItemAbout setTarget:aboutWindow];
   menuItemQuit = [menu addItemWithTitle:@"Quit" action:@selector(menuQuit:) keyEquivalent:@""];
   [menuItemQuit setEnabled:YES];
   [menuItemQuit setTarget:self];
@@ -265,20 +272,21 @@
       [bottomStr drawAtPoint:NSMakePoint(bottomBias + bottomLength + ROTATESEP,BOTTOMHEIGHT) 
               withAttributes:fontAttr];
   }
-  
-  // [[NSColor selectedMenuItemColor] set];
-  // NSRectFill(dirtyRect);
 }
 
 - (void)mouseDown:(NSEvent *)theEvent
 {
   [super mouseDown:theEvent];
-  [statusItem popUpStatusItemMenu:menu];
+  [[owner statusItem] popUpStatusItemMenu:menu];
 }
 
 - (iTunesState)state
 {
   return state;
+}
+
+- (void)updateParams:(prefParams *)params{
+  
 }
 
 - (void)dealloc
@@ -291,6 +299,7 @@
   [album release];
   [bottomStr release];
   [menu release];
+  [super dealloc];
 }
 
 @end

@@ -29,11 +29,13 @@
 //
 
 #import "AppDelegate.h"
-#define LENGTH 90
-#define BANNERUPDATEINTERVAL 1.0/8.0
+#define LENGTH 60
+#define BANNERUPDATEINTERVAL 1.0/7.0
 #define ITUNESRUNNINGINTERVAL 2.0
 
 @implementation AppDelegate
+
+@synthesize statusItem;
 
 - (void)dealloc
 {
@@ -100,6 +102,18 @@
   }
 }
 
+- (void)updateParams:(prefParams *)params{
+  [statusItem setLength:params->width];
+  [timerBannerUpdate invalidate];
+  timerBannerUpdate = [NSTimer scheduledTimerWithTimeInterval:params->updateFreq
+                                                       target:self
+                                                     selector:@selector(printBanner:)
+                                                     userInfo:nil
+                                                      repeats:YES];  
+
+  [myView updateParams:params];
+}
+
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification
 {
   iTunes = [SBApplication applicationWithBundleIdentifier:@"com.apple.iTunes"];
@@ -113,11 +127,13 @@
   view = [[myView alloc] initWithFrame:NSMakeRect(0,
                                                   0,
                                                   [statusItem length],
-                                                  [[NSStatusBar systemStatusBar] thickness])];
+                                                  [[NSStatusBar systemStatusBar] thickness])
+                                 andOwner:self];
   
   [self checkITunesRunning:nil];
-  [view setStatusItem:statusItem];
   [statusItem setView:view];
+  
+  [preferences initWithOwner:self];
   
   [[NSDistributedNotificationCenter defaultCenter] addObserver:self
                                                       selector:@selector(updateSong:)
