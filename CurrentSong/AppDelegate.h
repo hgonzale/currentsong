@@ -33,18 +33,28 @@
 #import "myView.h"
 #import "prefMgr.h"
 
-@interface AppDelegate : NSObject <NSApplicationDelegate,hasStatusItem,hasUpdateParams> {
+@interface AppDelegate : NSObject <NSApplicationDelegate,canShowMenu,hasUpdateParams> {
   NSStatusItem *statusItem;
+  NSMenu *menu;
+  NSWindow *aboutWindow;
   iTunesApplication *iTunes;
   myView *view;
   NSTimer *timerBannerUpdate;
   NSTimer *timerITunesRunning;
   
+  CGFloat width;
+  double updateFreq;
+  
   prefMgr *preferences;
+  NSMenuItem *aboutMenuItem;
+  NSMenuItem *prefMenuItem;
 }
 
 - (void)updateParams:(prefParams *)params;
+- (void)showMenu;
+- (void)quitApp;
 
-@property (readonly) NSStatusItem *statusItem;
+@property (assign) IBOutlet NSMenu *menu;
+@property (assign) IBOutlet NSWindow *aboutWindow;
 
 @end

@@ -54,7 +54,7 @@ typedef struct {
 
 - (id)initWithOwner:(id)myowner;
 - (IBAction)updateParams:(id)sender;
-- (void)openWindow:(id)sender;
+- (prefParams *)params;
 
 @property (assign) IBOutlet NSWindow *prefWindow;
 @property (assign) IBOutlet NSSlider *updateFreqSlider;

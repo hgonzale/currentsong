@@ -86,7 +86,7 @@
 						<object class="NSTextField" id="249424001">
 							<reference key="NSNextResponder" ref="1006"/>
 							<int key="NSvFlags">268</int>
-							<string key="NSFrame">{{171, 133}, {30, 22}}</string>
+							<string key="NSFrame">{{171, 133}, {50, 22}}</string>
 							<reference key="NSSuperview" ref="1006"/>
 							<reference key="NSWindow"/>
 							<reference key="NSNextKeyView" ref="765740226"/>
@@ -95,6 +95,7 @@
 							<object class="NSTextFieldCell" key="NSCell" id="410802656">
 								<int key="NSCellFlags">-1805517247</int>
 								<int key="NSCellFlags2">71305280</int>
+								<real value="90" key="NSContents"/>
 								<object class="NSFont" key="NSSupport" id="430983725">
 									<string key="NSName">LucidaGrande</string>
 									<double key="NSSize">13</double>
@@ -124,16 +125,16 @@
 											<object class="NSLocale" id="804318973">
 												<string key="NS.identifier"/>
 											</object>
-											<real value="100"/>
+											<real value="300"/>
 											<real value="30"/>
 											<string>-∞</string>
 											<string/>
-											<integer value="1"/>
+											<integer value="0"/>
 											<string>+∞</string>
 										</object>
 									</object>
-									<string key="NS.positiveformat">#,##0.###</string>
-									<string key="NS.negativeformat">#,##0.###</string>
+									<string key="NS.positiveformat">#</string>
+									<string key="NS.negativeformat">#</string>
 									<nil key="NS.positiveattrs"/>
 									<nil key="NS.negativeattrs"/>
 									<nil key="NS.zero"/>
@@ -151,7 +152,7 @@
 										</object>
 									</object>
 									<real value="30" key="NS.min"/>
-									<real value="100" key="NS.max"/>
+									<real value="300" key="NS.max"/>
 									<object class="NSDecimalNumberHandler" key="NS.rounding">
 										<int key="NS.roundingmode">3</int>
 										<bool key="NS.raise.overflow">YES</bool>
@@ -160,11 +161,11 @@
 									</object>
 									<string key="NS.decimal">.</string>
 									<string key="NS.thousand">,</string>
-									<bool key="NS.hasthousands">YES</bool>
+									<bool key="NS.hasthousands">NO</bool>
 									<bool key="NS.localized">NO</bool>
 									<bool key="NS.allowsfloats">YES</bool>
 								</object>
-								<string key="NSPlaceholderString">90</string>
+								<string key="NSPlaceholderString"/>
 								<string key="NSCellIdentifier">_NS:285</string>
 								<reference key="NSControlView" ref="249424001"/>
 								<bool key="NSDrawsBackground">YES</bool>
@@ -191,7 +192,7 @@
 						<object class="NSTextField" id="442579375">
 							<reference key="NSNextResponder" ref="1006"/>
 							<int key="NSvFlags">268</int>
-							<string key="NSFrame">{{171, 98}, {30, 22}}</string>
+							<string key="NSFrame">{{171, 98}, {50, 22}}</string>
 							<reference key="NSSuperview" ref="1006"/>
 							<reference key="NSWindow"/>
 							<reference key="NSNextKeyView" ref="426853766"/>
@@ -200,7 +201,7 @@
 							<object class="NSTextFieldCell" key="NSCell" id="592143889">
 								<int key="NSCellFlags">-1805517247</int>
 								<int key="NSCellFlags2">71305280</int>
-								<real value="2" key="NSContents"/>
+								<real value="10" key="NSContents"/>
 								<reference key="NSSupport" ref="430983725"/>
 								<object class="NSNumberFormatter" key="NSFormatter" id="900831456">
 									<object class="NSMutableDictionary" key="NS.attributes">
@@ -273,7 +274,7 @@
 						<object class="NSTextField" id="475924942">
 							<reference key="NSNextResponder" ref="1006"/>
 							<int key="NSvFlags">268</int>
-							<string key="NSFrame">{{171, 63}, {30, 22}}</string>
+							<string key="NSFrame">{{171, 63}, {50, 22}}</string>
 							<reference key="NSSuperview" ref="1006"/>
 							<reference key="NSWindow"/>
 							<reference key="NSNextKeyView" ref="462914805"/>
@@ -282,7 +283,7 @@
 							<object class="NSTextFieldCell" key="NSCell" id="157865623">
 								<int key="NSCellFlags">-1804468671</int>
 								<int key="NSCellFlags2">4195328</int>
-								<string key="NSContents">—</string>
+								<string key="NSContents"> — </string>
 								<reference key="NSSupport" ref="430983725"/>
 								<string key="NSCellIdentifier">_NS:903</string>
 								<reference key="NSControlView" ref="475924942"/>

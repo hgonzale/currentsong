@@ -29,21 +29,14 @@
 //
 
 #import "AppDelegate.h"
-#define LENGTH 60
-#define BANNERUPDATEINTERVAL 1.0/7.0
+//#define LENGTH 60
+//#define BANNERUPDATEINTERVAL 1.0/7.0
 #define ITUNESRUNNINGINTERVAL 2.0
 
 @implementation AppDelegate
 
-@synthesize statusItem;
-
-- (void)dealloc
-{
-  [[NSDistributedNotificationCenter defaultCenter] removeObserver:self];
-  [iTunes release];
-  [statusItem release];
-  [super dealloc];
-}
+@synthesize menu;
+@synthesize aboutWindow;
 
 - (void)updateSong:(NSNotification *)iTunesNotification
 {
@@ -102,16 +95,25 @@
   }
 }
 
-- (void)updateParams:(prefParams *)params{
-  [statusItem setLength:params->width];
+- (void)updateParams:(prefParams *)params
+{
+  width = params->width;
+  updateFreq = params->updateFreq;
+  
+  [statusItem setLength:width];
   [timerBannerUpdate invalidate];
-  timerBannerUpdate = [NSTimer scheduledTimerWithTimeInterval:params->updateFreq
+  timerBannerUpdate = [NSTimer scheduledTimerWithTimeInterval:1.0/updateFreq
                                                        target:self
                                                      selector:@selector(printBanner:)
                                                      userInfo:nil
                                                       repeats:YES];  
 
-  [myView updateParams:params];
+  [view updateParams:params];
+}
+
+- (void)showMenu
+{
+  [statusItem popUpStatusItemMenu:menu];
 }
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification
@@ -119,28 +121,31 @@
   iTunes = [SBApplication applicationWithBundleIdentifier:@"com.apple.iTunes"];
   [iTunes retain];
   
-  statusItem = [[NSStatusBar systemStatusBar] statusItemWithLength:LENGTH];
+  preferences = [[prefMgr alloc] initWithOwner:self];
+  width = [preferences params]->width;
+  updateFreq = [preferences params]->updateFreq;
+  
+  statusItem = [[NSStatusBar systemStatusBar] statusItemWithLength:width];
   [statusItem retain];
   [statusItem setHighlightMode:NO];
   [statusItem setEnabled:YES];
   
   view = [[myView alloc] initWithFrame:NSMakeRect(0,
                                                   0,
-                                                  [statusItem length],
+                                                  width,
                                                   [[NSStatusBar systemStatusBar] thickness])
-                                 andOwner:self];
+                              andOwner:self
+                             andParams:[preferences params]];
   
   [self checkITunesRunning:nil];
   [statusItem setView:view];
-  
-  [preferences initWithOwner:self];
   
   [[NSDistributedNotificationCenter defaultCenter] addObserver:self
                                                       selector:@selector(updateSong:)
                                                           name:@"com.apple.iTunes.playerInfo"
                                                         object:nil];
   
-  timerBannerUpdate = [NSTimer scheduledTimerWithTimeInterval:BANNERUPDATEINTERVAL
+  timerBannerUpdate = [NSTimer scheduledTimerWithTimeInterval:1.0/updateFreq
                                                        target:self
                                                      selector:@selector(printBanner:)
                                                      userInfo:nil
@@ -151,6 +156,23 @@
                                                       selector:@selector(checkITunesRunning:)
                                                       userInfo:nil
                                                        repeats:YES];
+
+  [NSBundle loadNibNamed:@"aboutWindow" owner:self];
+  [NSBundle loadNibNamed:@"statusMenu" owner:self];
+}
+
+- (void)quitApp
+{
+  [[NSApplication sharedApplication] terminate:nil]; 
+}
+
+- (void)dealloc
+{
+  [[NSDistributedNotificationCenter defaultCenter] removeObserver:self];
+  [preferences release];
+  [iTunes release];
+  [statusItem release];
+  [super dealloc];
 }
 
 @end

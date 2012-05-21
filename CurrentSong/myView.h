@@ -30,8 +30,8 @@
 #import <Cocoa/Cocoa.h>
 #import "prefMgr.h"
 
-@protocol hasStatusItem
-- (NSStatusItem *)statusItem;
+@protocol canShowMenu
+- (void)showMenu;
 @end
 
 typedef enum {
@@ -43,7 +43,7 @@ typedef enum {
 } iTunesState;
 
 @interface myView : NSView <hasUpdateParams> {
-  id <hasStatusItem> owner;
+  id <canShowMenu> owner;
   
 @private
   NSString *name;
@@ -53,30 +53,25 @@ typedef enum {
 
   iTunesState state;
   
-  int topSkipItersCount;
-  int bottomSkipItersCount;
+  long int topSkipItersCount;
+  long int bottomSkipItersCount;
   
   NSBezierPath *stop;
   NSBezierPath *play;
   NSBezierPath *pause;
 
-  NSMenu *menu;
-
-  NSWindowController *about;
-  
   CGFloat topBias;
   CGFloat bottomBias;
   CGFloat topLength;
   CGFloat bottomLength;
   
   NSDictionary *fontAttr;
-  NSWindow *aboutWindow;
   
   NSString *separator;
-  int skipIters;
+  long int skipIters;
 }
 
-- (id)initWithFrame:(NSRect)frame andOwner:(id <hasStatusItem>)myOwner;
+- (id)initWithFrame:(NSRect)frame andOwner:(id <canShowMenu>)myOwner andParams:(prefParams *)params;
 - (void)updateBias;
 - (void)setName:(NSString *)theName 
       andArtist:(NSString *)theArtist 
@@ -86,6 +81,5 @@ typedef enum {
 - (void)updateParams:(prefParams *)params;
 
 @property (retain) NSDictionary *fontAttr;
-@property (assign) IBOutlet NSWindow *aboutWindow;
 
 @end

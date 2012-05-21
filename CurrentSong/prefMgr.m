@@ -37,7 +37,8 @@
 @synthesize delayTField;
 @synthesize sepStrTField;
 
-- (id)initWithOwner:(id <hasUpdateParams>)myowner {
+- (id)initWithOwner:(id <hasUpdateParams>)myowner
+{
   self = [super init];
   
   owner = myowner;
@@ -48,25 +49,36 @@
   // Instead, I'll read them from the GUI for now
   
   params.updateFreq = [updateFreqSlider doubleValue];
-  params.width = [widthTField integerValue];
+  params.width = [widthTField doubleValue];
   params.delay = [delayTField doubleValue];
+  [params.separator autorelease];
   params.separator = [sepStrTField stringValue];
+  [params.separator retain];
 
   return self;
 }
 
-- (IBAction)updateParams:(id)sender {
-
+- (IBAction)updateParams:(id)sender
+{
   params.updateFreq = [updateFreqSlider doubleValue];
   params.width = [widthTField integerValue];
   params.delay = [delayTField doubleValue];
+  [params.separator autorelease];
   params.separator = [sepStrTField stringValue];
+  [params.separator retain];
 
   [owner updateParams:&params];
 }
 
-- (void)openWindow:(id)sender{
-  [prefWindow makeKeyAndOrderFront:sender];
+- (prefParams *)params
+{
+  return &params;
+}
+
+- (void)dealloc
+{
+  [params.separator release];
+  [super dealloc];
 }
 
 @end

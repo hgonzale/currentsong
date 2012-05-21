@@ -34,26 +34,18 @@
 #define BOTTOMHEIGHT 0.0
 #define ROTATESEP 25.0
 #define BIASINC -1.0
-#define SKIPITERS 60
-#define SEPARATOR @" – "
-#define STRNOTRUNNING @"iTunes not running"
+//#define SKIPITERS 60
+//#define SEPARATOR @" – "
+#define STRNOTRUNNING @"iTunes is not running"
 #define STRUNKNOWN @"Unknown state"
 #define STRNOTRACK @"No Track"
 
 @implementation myView
 
 @synthesize fontAttr;
-@synthesize aboutWindow;
 
-- (void)menuQuit:(id)sender
+- (id)initWithFrame:(NSRect)frame andOwner:(id <canShowMenu>)myOwner andParams:(prefParams *)params
 {
-  [[NSApplication sharedApplication] terminate:nil];
-}
-
-- (id)initWithFrame:(NSRect)frame andOwner:(id <hasStatusItem>)myOwner
-{
-  NSMenuItem *menuItemQuit, *menuItemAbout;
-  
   self = [super initWithFrame:frame];
   if( !self ) 
   {
@@ -62,6 +54,10 @@
   }
   
   owner = myOwner;
+
+  skipIters = lround(params->delay * params->updateFreq);
+  separator = params->separator;
+  [separator retain];
   
   name = nil;
   artist = nil;
@@ -92,17 +88,6 @@
   [play setLineJoinStyle:NSRoundLineJoinStyle];
   [play setLineWidth:1.0];
   [play retain];
-  
-  [NSBundle loadNibNamed:@"aboutWindow" owner:self];
-    
-  menu = [[NSMenu alloc] init];
-  [menu setAutoenablesItems:NO];
-  menuItemAbout = [menu addItemWithTitle:@"About" action:@selector(makeKeyAndOrderFront:) keyEquivalent:@""];
-  [menuItemAbout setEnabled:YES];
-  [menuItemAbout setTarget:aboutWindow];
-  menuItemQuit = [menu addItemWithTitle:@"Quit" action:@selector(menuQuit:) keyEquivalent:@""];
-  [menuItemQuit setEnabled:YES];
-  [menuItemQuit setTarget:self];
   
   topBias = 0.0;
   bottomBias = 0.0;
@@ -135,13 +120,13 @@
   if( topBias + ROTATESEP <= -topLength )
   {
     topBias = 0.0;
-    topSkipItersCount = SKIPITERS;
+    topSkipItersCount = skipIters;
   }
   
   if( bottomBias + ROTATESEP <= -bottomLength )
   {
     bottomBias = 0.0;
-    bottomSkipItersCount = SKIPITERS;
+    bottomSkipItersCount = skipIters;
   }
   
   if( topSkipItersCount > 0 )
@@ -192,7 +177,7 @@
       else
       {
         [bottomStr autorelease];
-        bottomStr = [artist stringByAppendingString:SEPARATOR];
+        bottomStr = [artist stringByAppendingString:separator];
         bottomStr = [bottomStr stringByAppendingString:album];
         [bottomStr retain];        
       }
@@ -216,8 +201,8 @@
   bottomLength = [bottomStr sizeWithAttributes:fontAttr].width;
   bottomBias = 0.0;
   
-  topSkipItersCount = SKIPITERS;
-  bottomSkipItersCount = SKIPITERS;
+  topSkipItersCount = skipIters;
+  bottomSkipItersCount = skipIters;
 
   [self setNeedsDisplay:YES];
 }
@@ -277,7 +262,7 @@
 - (void)mouseDown:(NSEvent *)theEvent
 {
   [super mouseDown:theEvent];
-  [[owner statusItem] popUpStatusItemMenu:menu];
+  [owner showMenu];
 }
 
 - (iTunesState)state
@@ -285,8 +270,17 @@
   return state;
 }
 
-- (void)updateParams:(prefParams *)params{
+- (void)updateParams:(prefParams *)params
+{
+  skipIters = lround(params->delay * params->updateFreq);
+  [separator autorelease];
+  separator = params->separator;
+  [separator retain];
   
+  [self setFrame:NSMakeRect(0, 
+                            0, 
+                            params->width, 
+                            [[NSStatusBar systemStatusBar] thickness])];
 }
 
 - (void)dealloc
@@ -298,7 +292,7 @@
   [artist release];
   [album release];
   [bottomStr release];
-  [menu release];
+  [separator release];
   [super dealloc];
 }
 
