@@ -29,6 +29,8 @@
 
 #import <Foundation/Foundation.h>
 
+#define CONFIGFILENAME @"csparams.data"
+
 typedef struct {
   CGFloat width;
   double delay;

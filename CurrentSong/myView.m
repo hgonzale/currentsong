@@ -34,8 +34,6 @@
 #define BOTTOMHEIGHT 0.0
 #define ROTATESEP 25.0
 #define BIASINC -1.0
-//#define SKIPITERS 60
-//#define SEPARATOR @" – "
 #define STRNOTRUNNING @"iTunes is not running"
 #define STRUNKNOWN @"Unknown state"
 #define STRNOTRACK @"No Track"

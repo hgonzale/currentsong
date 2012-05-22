@@ -45,15 +45,34 @@
   
   [NSBundle loadNibNamed:@"prefWindow" owner:self];
   
-  // Here we should load the saved params.
-  // Instead, I'll read them from the GUI for now
-  
-  params.updateFreq = [updateFreqSlider doubleValue];
-  params.width = [widthTField doubleValue];
-  params.delay = [delayTField doubleValue];
-  [params.separator autorelease];
-  params.separator = [sepStrTField stringValue];
-  [params.separator retain];
+  NSString *configPath = [[[NSBundle mainBundle] resourcePath] stringByAppendingPathComponent:CONFIGFILENAME];
+  if( [[NSFileManager defaultManager] fileExistsAtPath:configPath] )
+  {
+    NSData *data = [NSData dataWithContentsOfFile:configPath];
+    NSKeyedUnarchiver *unarchiver = [[NSKeyedUnarchiver alloc] initForReadingWithData:data];
+    
+    params.updateFreq = [unarchiver decodeDoubleForKey:@"updateFreq"];
+    params.width = [unarchiver decodeDoubleForKey:@"width"];
+    params.delay = [unarchiver decodeDoubleForKey:@"delay"];
+    params.separator = [unarchiver decodeObjectForKey:@"separator"];
+    [params.separator retain];
+    [unarchiver finishDecoding];
+    [unarchiver release];    
+
+    [updateFreqSlider setDoubleValue:params.updateFreq];
+    [widthTField setDoubleValue:params.width];
+    [delayTField setDoubleValue:params.delay];
+    [sepStrTField setStringValue:params.separator];
+  }
+  else
+  {
+    NSLog( @"No parameters file found, using defaults." );
+    params.updateFreq = [updateFreqSlider doubleValue];
+    params.width = [widthTField doubleValue];
+    params.delay = [delayTField doubleValue];
+    params.separator = [sepStrTField stringValue];
+    [params.separator retain];
+  }
 
   return self;
 }
@@ -68,6 +87,11 @@
   [params.separator retain];
 
   [owner updateParams:&params];
+
+  // Should rewrite bottomStr here
+  
+  if( [sender isKindOfClass:[NSButton class]] && [[(NSButton *)sender title] isEqualToString:@"Done" ] )
+    [prefWindow performClose:sender];
 }
 
 - (prefParams *)params
