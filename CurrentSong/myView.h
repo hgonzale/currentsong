@@ -29,6 +29,7 @@
 
 #import <Cocoa/Cocoa.h>
 #import "prefMgr.h"
+#import "rotatingBanner.h"
 
 @protocol canShowMenu
 - (void)showMenu;
@@ -42,44 +43,34 @@ typedef enum {
   UNKNOWN
 } iTunesState;
 
-@interface myView : NSView <hasUpdateParams> {
+@interface myView : NSView <hasUpdateParams,bannerController>
+{
   id <canShowMenu> owner;
   
-@private
   NSString *name;
   NSString *album;
   NSString *artist;
-  NSString *bottomStr;
+  NSString *separator;
 
   iTunesState state;
-  
-  long int topSkipItersCount;
-  long int bottomSkipItersCount;
   
   NSBezierPath *stop;
   NSBezierPath *play;
   NSBezierPath *pause;
-
-  CGFloat topBias;
-  CGFloat bottomBias;
-  CGFloat topLength;
-  CGFloat bottomLength;
   
-  NSDictionary *fontAttr;
-  
-  NSString *separator;
-  long int skipIters;
+  rotatingBanner *top;
+  rotatingBanner *bottom;
 }
 
 - (id)initWithFrame:(NSRect)frame andOwner:(id <canShowMenu>)myOwner andParams:(prefParams *)params;
-- (void)updateBias;
+// - (void)updateBias;
 - (void)setName:(NSString *)theName 
       andArtist:(NSString *)theArtist 
        andAlbum:(NSString *)theAlbum 
        andState:(iTunesState)theState;
-- (iTunesState)state;
 - (void)updateParams:(prefParams *)params;
+- (void)didFinishRotating:(id)sender;
 
-@property (retain) NSDictionary *fontAttr;
+@property (readonly) iTunesState state;
 
 @end

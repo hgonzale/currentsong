@@ -39,7 +39,6 @@
   NSWindow *aboutWindow;
   iTunesApplication *iTunes;
   myView *view;
-  NSTimer *timerBannerUpdate;
   NSTimer *timerITunesRunning;
   
   CGFloat width;

@@ -16,6 +16,7 @@
 		0AAC5CD11539515700F9558D /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 0AAC5CD01539515700F9558D /* AppDelegate.m */; };
 		0AB0F84A153FE3F600AE4F6D /* ScriptingBridge.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0AB0F849153FE3F600AE4F6D /* ScriptingBridge.framework */; };
 		0AC13CEF1558F74900E4C0EF /* aboutWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0AC13CEE1558F74900E4C0EF /* aboutWindow.xib */; };
+		0ACA4FBE156E0B9800A33B70 /* rotatingBanner.m in Sources */ = {isa = PBXBuildFile; fileRef = 0ACA4FBD156E0B9800A33B70 /* rotatingBanner.m */; };
 		0ACD27E0155E2D170028BADD /* copyright.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 0ACD27DF155E2D170028BADD /* copyright.rtf */; };
 		0ACD27E2155E32D90028BADD /* prefWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0ACD27E1155E32D80028BADD /* prefWindow.xib */; };
 		0AF5BB2815565CF8006A1381 /* mainnib.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0AF5BB2715565CF8006A1381 /* mainnib.xib */; };
@@ -41,6 +42,8 @@
 		0AAC5CD01539515700F9558D /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		0AB0F849153FE3F600AE4F6D /* ScriptingBridge.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = ScriptingBridge.framework; sourceTree = "<group>"; };
 		0AC13CEE1558F74900E4C0EF /* aboutWindow.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = aboutWindow.xib; sourceTree = "<group>"; };
+		0ACA4FBC156E0B9800A33B70 /* rotatingBanner.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = rotatingBanner.h; sourceTree = "<group>"; };
+		0ACA4FBD156E0B9800A33B70 /* rotatingBanner.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = rotatingBanner.m; sourceTree = "<group>"; };
 		0ACD27DF155E2D170028BADD /* copyright.rtf */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.rtf; path = copyright.rtf; sourceTree = "<group>"; };
 		0ACD27E1155E32D80028BADD /* prefWindow.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = prefWindow.xib; sourceTree = "<group>"; };
 		0AF5BB2715565CF8006A1381 /* mainnib.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = mainnib.xib; sourceTree = "<group>"; };
@@ -114,6 +117,8 @@
 				0A452F9D156999570069DB31 /* prefMgr.h */,
 				0A452F9E156999570069DB31 /* prefMgr.m */,
 				0A452FA8156A27420069DB31 /* statusMenu.xib */,
+				0ACA4FBC156E0B9800A33B70 /* rotatingBanner.h */,
+				0ACA4FBD156E0B9800A33B70 /* rotatingBanner.m */,
 			);
 			path = CurrentSong;
 			sourceTree = "<group>";
@@ -200,6 +205,7 @@
 				0AAC5CD11539515700F9558D /* AppDelegate.m in Sources */,
 				0A42C8B71549232400580F05 /* myView.m in Sources */,
 				0A452F9F156999570069DB31 /* prefMgr.m in Sources */,
+				0ACA4FBE156E0B9800A33B70 /* rotatingBanner.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

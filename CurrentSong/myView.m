@@ -29,31 +29,34 @@
 
 #import "myView.h"
 
-#define SYMBOLLENGTH 9.0
+#define SYMBOLLENGTH 10.0
 #define TOPHEIGHT 10.0
 #define BOTTOMHEIGHT 0.0
 #define ROTATESEP 25.0
 #define BIASINC -1.0
+#define SYMBOLCOLOR grayColor
 #define STRNOTRUNNING @"iTunes is not running"
 #define STRUNKNOWN @"Unknown state"
 #define STRNOTRACK @"No Track"
 
 @implementation myView
 
-@synthesize fontAttr;
+@synthesize state;
 
-- (id)initWithFrame:(NSRect)frame andOwner:(id <canShowMenu>)myOwner andParams:(prefParams *)params
+- (id)initWithFrame:(NSRect)frame 
+           andOwner:(id <canShowMenu>)myOwner 
+          andParams:(prefParams *)params
 {
+  CGFloat bannerHeight = 0.5 * [[NSStatusBar systemStatusBar] thickness];
+  
   self = [super initWithFrame:frame];
   if( !self ) 
   {
-    NSLog( @"super NSView didn't open. Major error." );
     exit(1);
   }
   
   owner = myOwner;
 
-  skipIters = lround(params->delay * params->updateFreq);
   separator = params->separator;
   [separator retain];
   
@@ -61,20 +64,15 @@
   artist = nil;
   album = nil;
   state = NOTRUNNING;
-  [self setFontAttr:[NSDictionary dictionaryWithObject:[NSFont fontWithName:@"Geneva"
-                                                                       size:9.0]
-                                                forKey:NSFontAttributeName]];
   
   stop = [NSBezierPath bezierPath];
   [stop appendBezierPathWithRect:NSMakeRect(0, 12.5, 7, 7)];
-  [stop setLineJoinStyle:NSRoundLineJoinStyle];
   [stop setLineWidth:1.0];
   [stop retain];
   
   pause = [NSBezierPath bezierPath];
   [pause appendBezierPathWithRect:NSMakeRect(0, 12.5, 2.5, 7)];
   [pause appendBezierPathWithRect:NSMakeRect(4.5, 12.5, 2.5, 7)];
-  [pause setLineJoinStyle:NSRoundLineJoinStyle];
   [pause setLineWidth:1.0];
   [pause retain];
   
@@ -83,58 +81,23 @@
   [play lineToPoint:NSMakePoint(0, 19.5)];
   [play lineToPoint:NSMakePoint(7, 16)];
   [play closePath];
-  [play setLineJoinStyle:NSRoundLineJoinStyle];
   [play setLineWidth:1.0];
   [play retain];
   
-  topBias = 0.0;
-  bottomBias = 0.0;
-  topLength = 0.0;
-  bottomLength = 0.0;
+  top = [[rotatingBanner alloc] initWithFrame:NSMakeRect( SYMBOLLENGTH, TOPHEIGHT, [self bounds].size.width - SYMBOLLENGTH, bannerHeight ) 
+                                     andOwner:self
+                                    andParams:params];
+  [top retain];
   
-  topSkipItersCount = 0;
-  bottomSkipItersCount = 0;
+  bottom = [[rotatingBanner alloc] initWithFrame:NSMakeRect( 0.0, BOTTOMHEIGHT, [self bounds].size.width, bannerHeight ) 
+                                        andOwner:self
+                                       andParams:params];
+  [bottom retain];
+  
+  [self addSubview:top];
+  [self addSubview:bottom];
   
   return self;
-}
-
-- (void)updateBias
-{
-  CGFloat myLength = [self bounds].size.width;
-  BOOL needsDisplay = NO;
-  
-  if( myLength < topLength + SYMBOLLENGTH && topSkipItersCount == 0 )
-  {
-    topBias = topBias + BIASINC;
-    needsDisplay = YES;
-  }
-  
-  if( myLength < bottomLength && bottomSkipItersCount == 0 )
-  {
-    bottomBias = bottomBias + BIASINC;
-    needsDisplay = YES;
-  }
-  
-  if( topBias + ROTATESEP <= -topLength )
-  {
-    topBias = 0.0;
-    topSkipItersCount = skipIters;
-  }
-  
-  if( bottomBias + ROTATESEP <= -bottomLength )
-  {
-    bottomBias = 0.0;
-    bottomSkipItersCount = skipIters;
-  }
-  
-  if( topSkipItersCount > 0 )
-    topSkipItersCount--;
-  
-  if( bottomSkipItersCount > 0 )
-    bottomSkipItersCount--;
-  
-  if( needsDisplay )
-    [self setNeedsDisplay:YES];
 }
 
 - (void)setName:(NSString *)theName 
@@ -168,92 +131,72 @@
     case STOPPED:
     case PLAYING:
     case PAUSED:
+      [top setText:name];
+
       if( [artist length] == 0 )
-        bottomStr = album;
+        [bottom setText:album];
       else if( [album length] == 0 )
-        bottomStr = artist;
+        [bottom setText:artist];
       else
       {
-        [bottomStr autorelease];
-        bottomStr = [artist stringByAppendingString:separator];
-        bottomStr = [bottomStr stringByAppendingString:album];
-        [bottomStr retain];        
+        NSString *temp = [artist stringByAppendingString:separator];
+        temp = [temp stringByAppendingString:album];
+        [bottom setText:temp];        
       }
       
-      topLength = [name sizeWithAttributes:fontAttr].width;
-      topBias = 0.0;
       break;
+      
     case NOTRUNNING:
-      bottomStr = [NSString stringWithString:STRNOTRUNNING];
-
-      topLength = 0.0;
-      topBias = 0.0;
+      [top setText:@""];
+      [bottom setText:STRNOTRUNNING];
       break;
+      
     default:
-      bottomStr = [NSString stringWithString:STRUNKNOWN];
-
-      topLength = 0.0;
-      topBias = 0.0;
+      [top setText:@""];
+      [bottom setText:STRUNKNOWN];
+      break;
   }
-  
-  bottomLength = [bottomStr sizeWithAttributes:fontAttr].width;
-  bottomBias = 0.0;
-  
-  topSkipItersCount = skipIters;
-  bottomSkipItersCount = skipIters;
 
+  [top startRotating];
+  [bottom startRotating];
+  
   [self setNeedsDisplay:YES];
+}
+
+- (void)didFinishRotating:(id)sender
+{
+  if(( sender == top && ![bottom isRotating] ) ||
+     ( sender == bottom && ![top isRotating] ) )
+  {
+    [top startRotating];
+    [bottom startRotating];
+  }
 }
 
 - (void)drawRect:(NSRect)dirtyRect
 {
-  CGFloat myLength = [self bounds].size.width;
-  BOOL printStandardBanners = NO;
-  
-  switch(state)
+  switch( state )
   {
     case PLAYING:
-      [[NSColor grayColor] set];
+      [[NSColor SYMBOLCOLOR] set];
       [play fill];
       [[NSColor blackColor] set];
-      printStandardBanners = YES;
       break;
 
     case PAUSED:
-      [[NSColor grayColor] set];
+      [[NSColor SYMBOLCOLOR] set];
       [pause fill];
       [[NSColor blackColor] set];
-      printStandardBanners = YES;
       break;
 
     case STOPPED:
-      [[NSColor grayColor] set];
+      [[NSColor SYMBOLCOLOR] set];
       [stop fill];
       [[NSColor blackColor] set];
-      printStandardBanners = YES;
       break;
 
     default:
-      [bottomStr drawAtPoint:NSMakePoint(bottomBias,5) 
-              withAttributes:fontAttr];
-      if( bottomBias + bottomLength < myLength )
-        [bottomStr drawAtPoint:NSMakePoint(bottomBias + bottomLength + ROTATESEP,5) 
-                withAttributes:fontAttr];
-  }
-
-  if( printStandardBanners )
-  {
-    [name drawAtPoint:NSMakePoint(topBias + SYMBOLLENGTH,TOPHEIGHT) 
-       withAttributes:fontAttr];
-    if( myLength < topLength + SYMBOLLENGTH && topBias + topLength + ROTATESEP + SYMBOLLENGTH < myLength )
-      [name drawAtPoint:NSMakePoint(topBias + topLength + ROTATESEP + SYMBOLLENGTH,TOPHEIGHT) 
-         withAttributes:fontAttr];
-    
-    [bottomStr drawAtPoint:NSMakePoint(bottomBias,BOTTOMHEIGHT) 
-            withAttributes:fontAttr];
-    if( myLength < bottomLength && bottomBias + bottomLength + ROTATESEP < myLength )
-      [bottomStr drawAtPoint:NSMakePoint(bottomBias + bottomLength + ROTATESEP,BOTTOMHEIGHT) 
-              withAttributes:fontAttr];
+      break;
   }
 }
 
@@ -263,22 +206,19 @@
   [owner showMenu];
 }
 
-- (iTunesState)state
-{
-  return state;
-}
-
 - (void)updateParams:(prefParams *)params
 {
-  skipIters = lround(params->delay * params->updateFreq);
+  CGFloat bannerHeight = 0.5 * [[NSStatusBar systemStatusBar] thickness];
+
   [separator autorelease];
   separator = params->separator;
   [separator retain];
   
-  [self setFrame:NSMakeRect(0, 
-                            0, 
-                            params->width, 
-                            [[NSStatusBar systemStatusBar] thickness])];
+  [top setFrame:NSMakeRect( SYMBOLLENGTH, TOPHEIGHT, [self bounds].size.width - SYMBOLLENGTH, bannerHeight )];
+  [bottom setFrame:NSMakeRect( 0.0, BOTTOMHEIGHT, [self bounds].size.width, bannerHeight )];
+  
+  [top updateParams:params];
+  [bottom updateParams:params];
 }
 
 - (void)dealloc
@@ -289,7 +229,6 @@
   [name release];
   [artist release];
   [album release];
-  [bottomStr release];
   [separator release];
   [super dealloc];
 }

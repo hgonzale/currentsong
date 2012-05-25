@@ -29,7 +29,7 @@
 //
 
 #import "AppDelegate.h"
-#define ITUNESRUNNINGINTERVAL 2.0
+#define ITUNESRUNNINGINTERVAL 5.0
 
 @implementation AppDelegate
 
@@ -56,11 +56,6 @@
       andArtist:[userInfo objectForKey:@"Artist"]
        andAlbum:[userInfo objectForKey:@"Album"]
        andState:myState];
-}
-
-- (void)printBanner:(NSTimer *)theTimer
-{
-  [view updateBias];
 }
 
 - (void)checkITunesRunning:(NSTimer *)theTimer
@@ -99,13 +94,8 @@
   updateFreq = params->updateFreq;
   
   [statusItem setLength:width];
-  [timerBannerUpdate invalidate];
-  timerBannerUpdate = [NSTimer scheduledTimerWithTimeInterval:1.0/updateFreq
-                                                       target:self
-                                                     selector:@selector(printBanner:)
-                                                     userInfo:nil
-                                                      repeats:YES];  
 
+  [view setFrame:NSMakeRect(0.0, 0.0, width, [[NSStatusBar systemStatusBar] thickness])];
   [view updateParams:params];
 }
 
@@ -142,12 +132,6 @@
                                                       selector:@selector(updateSong:)
                                                           name:@"com.apple.iTunes.playerInfo"
                                                         object:nil];
-  
-  timerBannerUpdate = [NSTimer scheduledTimerWithTimeInterval:1.0/updateFreq
-                                                       target:self
-                                                     selector:@selector(printBanner:)
-                                                     userInfo:nil
-                                                      repeats:YES];
   
   timerITunesRunning = [NSTimer scheduledTimerWithTimeInterval:ITUNESRUNNINGINTERVAL
                                                         target:self
