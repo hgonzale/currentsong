@@ -95,7 +95,7 @@
   
   [statusItem setLength:width];
 
-  [view setFrame:NSMakeRect(0.0, 0.0, width, [[NSStatusBar systemStatusBar] thickness])];
+  [view setFrame:NSMakeRect( 0.0, 0.0, width, [[NSStatusBar systemStatusBar] thickness] )];
   [view updateParams:params];
 }
 
@@ -142,6 +142,8 @@
   [NSBundle loadNibNamed:@"aboutWindow" owner:self];
   [NSBundle loadNibNamed:@"statusMenu" owner:self];
   
+  [menu setDelegate:view];
+  
   // Make sure that the windows come to the front when activated.
   [aboutWindow setLevel:NSPopUpMenuWindowLevel];
   [[preferences prefWindow] setLevel:NSPopUpMenuWindowLevel];
@@ -149,20 +151,7 @@
 
 - (void)quitApp
 {
-  NSMutableData *data = [NSMutableData data];
-  NSKeyedArchiver *archiver = [[NSKeyedArchiver alloc] initForWritingWithMutableData:data];;
-  prefParams *params = [preferences params];
-  NSString *configPath = [[[NSBundle mainBundle] resourcePath] stringByAppendingPathComponent:CONFIGFILENAME];
-  
-  // NSLog( @"%@", configPath );
-  
-  [archiver encodeDouble:params->updateFreq forKey:@"updateFreq"];
-  [archiver encodeDouble:params->width forKey:@"width"];
-  [archiver encodeDouble:params->delay forKey:@"delay"];
-  [archiver encodeObject:params->separator forKey:@"separator"];
-  [archiver finishEncoding];
-  [data writeToFile:configPath atomically:YES];
-  [archiver release];
+  [preferences saveParams];
   
   [[NSApplication sharedApplication] terminate:nil]; 
 }

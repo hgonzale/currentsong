@@ -43,14 +43,13 @@ typedef enum {
   UNKNOWN
 } iTunesState;
 
-@interface myView : NSView <hasUpdateParams,bannerController>
+@interface myView : NSView <hasUpdateParams,bannerController,NSMenuDelegate>
 {
   id <canShowMenu> owner;
   
   NSString *name;
   NSString *album;
   NSString *artist;
-  NSString *separator;
 
   iTunesState state;
   
@@ -60,10 +59,11 @@ typedef enum {
   
   rotatingBanner *top;
   rotatingBanner *bottom;
+  
+  BOOL isClicked;
 }
 
 - (id)initWithFrame:(NSRect)frame andOwner:(id <canShowMenu>)myOwner andParams:(prefParams *)params;
-// - (void)updateBias;
 - (void)setName:(NSString *)theName 
       andArtist:(NSString *)theArtist 
        andAlbum:(NSString *)theAlbum 

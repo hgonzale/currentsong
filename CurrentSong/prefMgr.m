@@ -35,10 +35,12 @@
 @synthesize updateFreqSlider;
 @synthesize widthTField;
 @synthesize delayTField;
-@synthesize sepStrTField;
+@synthesize rotModeMatrix;
 
 - (id)initWithOwner:(id <hasUpdateParams>)myowner
 {
+  int dummy;
+  
   self = [super init];
   
   owner = myowner;
@@ -52,29 +54,56 @@
     NSKeyedUnarchiver *unarchiver = [[NSKeyedUnarchiver alloc] initForReadingWithData:data];
     
     params.updateFreq = [unarchiver decodeDoubleForKey:@"updateFreq"];
+    if( params.updateFreq == 0.0 ) // Sets default value if not found among params
+      params.updateFreq = [updateFreqSlider doubleValue];
+    
     params.width = [unarchiver decodeDoubleForKey:@"width"];
+    if( params.width == 0.0 ) // Sets default value if not found among params
+      params.width = [widthTField doubleValue];      
+    
     params.delay = [unarchiver decodeDoubleForKey:@"delay"];
-    params.separator = [unarchiver decodeObjectForKey:@"separator"];
-    [params.separator retain];
+    if( params.delay == 0.0 ) // Sets default value if not found among params
+      params.delay = [delayTField doubleValue];
+    
+    dummy = [unarchiver decodeIntForKey:@"mode"];
+    if( dummy == 0 ) // Sets default value if not found among params
+      params.mode = [rotModeMatrix selectedRow] + 1;
+    else
+      params.mode = dummy;
+    
     [unarchiver finishDecoding];
     [unarchiver release];    
 
     [updateFreqSlider setDoubleValue:params.updateFreq];
     [widthTField setDoubleValue:params.width];
     [delayTField setDoubleValue:params.delay];
-    [sepStrTField setStringValue:params.separator];
+    [rotModeMatrix selectCellAtRow:(params.mode-1) column:0];
   }
   else
   {
-    NSLog( @"No parameters file found, using defaults." );
+    // NSLog( @"No parameters file found, using defaults." );
     params.updateFreq = [updateFreqSlider doubleValue];
     params.width = [widthTField doubleValue];
     params.delay = [delayTField doubleValue];
-    params.separator = [sepStrTField stringValue];
-    [params.separator retain];
+    params.mode = [rotModeMatrix selectedRow] + 1;
   }
 
   return self;
+}
+
+- (void)saveParams
+{
+  NSMutableData *data = [NSMutableData data];
+  NSKeyedArchiver *archiver = [[NSKeyedArchiver alloc] initForWritingWithMutableData:data];;
+  NSString *configPath = [[[NSBundle mainBundle] resourcePath] stringByAppendingPathComponent:CONFIGFILENAME];
+  
+  [archiver encodeDouble:params.updateFreq forKey:@"updateFreq"];
+  [archiver encodeDouble:params.width forKey:@"width"];
+  [archiver encodeDouble:params.delay forKey:@"delay"];
+  [archiver encodeInt:params.mode forKey:@"mode"];
+  [archiver finishEncoding];
+  [data writeToFile:configPath atomically:YES];
+  [archiver release];
 }
 
 - (IBAction)updateParams:(id)sender
@@ -82,14 +111,10 @@
   params.updateFreq = [updateFreqSlider doubleValue];
   params.width = [widthTField integerValue];
   params.delay = [delayTField doubleValue];
-  [params.separator autorelease];
-  params.separator = [sepStrTField stringValue];
-  [params.separator retain];
-
+  params.mode = [rotModeMatrix selectedRow] + 1;
+  
   [owner updateParams:&params];
 
-  // Should rewrite bottomStr here
-  
   if( [sender isKindOfClass:[NSButton class]] && [[(NSButton *)sender title] isEqualToString:@"Done" ] )
     [prefWindow performClose:sender];
 }
@@ -101,7 +126,6 @@
 
 - (void)dealloc
 {
-  [params.separator release];
   [super dealloc];
 }
 

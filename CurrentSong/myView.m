@@ -32,9 +32,8 @@
 #define SYMBOLLENGTH 10.0
 #define TOPHEIGHT 10.0
 #define BOTTOMHEIGHT 0.0
-#define ROTATESEP 25.0
-#define BIASINC -1.0
-#define SYMBOLCOLOR grayColor
+#define SYMBOLCOLOR blackColor
+#define SEPARATOR @" — "
 #define STRNOTRUNNING @"iTunes is not running"
 #define STRUNKNOWN @"Unknown state"
 #define STRNOTRACK @"No Track"
@@ -57,33 +56,30 @@
   
   owner = myOwner;
 
-  separator = params->separator;
-  [separator retain];
-  
   name = nil;
   artist = nil;
   album = nil;
   state = NOTRUNNING;
-  
+
   stop = [NSBezierPath bezierPath];
-  [stop appendBezierPathWithRect:NSMakeRect(0, 12.5, 7, 7)];
+  [stop appendBezierPathWithRect:NSMakeRect(0, 12, 8, 8)];
   [stop setLineWidth:1.0];
   [stop retain];
   
   pause = [NSBezierPath bezierPath];
-  [pause appendBezierPathWithRect:NSMakeRect(0, 12.5, 2.5, 7)];
-  [pause appendBezierPathWithRect:NSMakeRect(4.5, 12.5, 2.5, 7)];
+  [pause appendBezierPathWithRect:NSMakeRect(0, 12, 3, 8)];
+  [pause appendBezierPathWithRect:NSMakeRect(5, 12, 3, 8)];
   [pause setLineWidth:1.0];
   [pause retain];
   
   play = [NSBezierPath bezierPath];
-  [play moveToPoint:NSMakePoint(0, 12.5)];
-  [play lineToPoint:NSMakePoint(0, 19.5)];
+  [play moveToPoint:NSMakePoint(0, 12)];
+  [play lineToPoint:NSMakePoint(0, 20)];
   [play lineToPoint:NSMakePoint(7, 16)];
   [play closePath];
   [play setLineWidth:1.0];
   [play retain];
-  
+
   top = [[rotatingBanner alloc] initWithFrame:NSMakeRect( SYMBOLLENGTH, TOPHEIGHT, [self bounds].size.width - SYMBOLLENGTH, bannerHeight ) 
                                      andOwner:self
                                     andParams:params];
@@ -93,6 +89,8 @@
                                         andOwner:self
                                        andParams:params];
   [bottom retain];
+  
+  isClicked = NO;
   
   [self addSubview:top];
   [self addSubview:bottom];
@@ -139,7 +137,7 @@
         [bottom setText:artist];
       else
       {
-        NSString *temp = [artist stringByAppendingString:separator];
+        NSString *temp = [artist stringByAppendingString:SEPARATOR];
         temp = [temp stringByAppendingString:album];
         [bottom setText:temp];        
       }
@@ -157,42 +155,47 @@
       break;
   }
 
-  [top startRotating];
-  [bottom startRotating];
+  [top startDelayAndRotate];
+  [bottom startDelayAndRotate];
   
   [self setNeedsDisplay:YES];
 }
 
 - (void)didFinishRotating:(id)sender
 {
-  if(( sender == top && ![bottom isRotating] ) ||
-     ( sender == bottom && ![top isRotating] ) )
+  if(( sender == top && ![bottom isActive] ) ||
+     ( sender == bottom && ![top isActive] ) )
   {
-    [top startRotating];
-    [bottom startRotating];
+    [top startDelayAndRotate];
+    [bottom startDelayAndRotate];
   }
 }
 
 - (void)drawRect:(NSRect)dirtyRect
 {
+  if( isClicked )
+  {
+    [[NSColor selectedMenuItemColor] set];
+    NSRectFill( dirtyRect);
+    [[NSColor selectedMenuItemTextColor] set];
+  }
+  else
+  {
+    [[NSColor textColor] set];
+  }
+  
   switch( state )
   {
     case PLAYING:
-      [[NSColor SYMBOLCOLOR] set];
       [play fill];
-      [[NSColor blackColor] set];
       break;
 
     case PAUSED:
-      [[NSColor SYMBOLCOLOR] set];
       [pause fill];
-      [[NSColor blackColor] set];
       break;
 
     case STOPPED:
-      [[NSColor SYMBOLCOLOR] set];
       [stop fill];
-      [[NSColor blackColor] set];
       break;
 
     default:
@@ -202,18 +205,33 @@
 
 - (void)mouseDown:(NSEvent *)theEvent
 {
+  isClicked = YES;
+  [top setIsClicked:isClicked];
+  [bottom setIsClicked:isClicked];
+  
+  [self setNeedsDisplay:YES];
+  [top setNeedsDisplay:YES];
+  [bottom setNeedsDisplay:YES];
+  
   [super mouseDown:theEvent];
   [owner showMenu];
+}
+
+- (void)menuDidClose:(NSMenu *)menu
+{
+  isClicked = NO;
+  [top setIsClicked:isClicked];
+  [bottom setIsClicked:isClicked];
+
+  [self setNeedsDisplay:YES];
+  [top setNeedsDisplay:YES];
+  [bottom setNeedsDisplay:YES];
 }
 
 - (void)updateParams:(prefParams *)params
 {
   CGFloat bannerHeight = 0.5 * [[NSStatusBar systemStatusBar] thickness];
 
-  [separator autorelease];
-  separator = params->separator;
-  [separator retain];
-  
   [top setFrame:NSMakeRect( SYMBOLLENGTH, TOPHEIGHT, [self bounds].size.width - SYMBOLLENGTH, bannerHeight )];
   [bottom setFrame:NSMakeRect( 0.0, BOTTOMHEIGHT, [self bounds].size.width, bannerHeight )];
   
@@ -229,7 +247,6 @@
   [name release];
   [artist release];
   [album release];
-  [separator release];
   [super dealloc];
 }
 

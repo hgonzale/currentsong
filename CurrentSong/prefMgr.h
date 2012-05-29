@@ -31,11 +31,17 @@
 
 #define CONFIGFILENAME @"csparams.data"
 
+typedef enum {
+  HORIZONTAL_CONT = 1,
+  HORIZONTAL_REV = 2,
+  VERTICAL = 3
+} rotationMode;
+
 typedef struct {
   CGFloat width;
   double delay;
-  NSString *separator;
   double updateFreq;
+  rotationMode mode;
 } prefParams;
 
 @protocol hasUpdateParams
@@ -49,12 +55,13 @@ typedef struct {
   NSSlider *updateFreqSlider;
   NSTextField *widthTField;
   NSTextField *delayTField;
-  NSTextField *sepStrTField;
+  NSMatrix *rotModeMatrix;
 
   prefParams params;
 }
 
 - (id)initWithOwner:(id)myowner;
+- (void)saveParams;
 - (IBAction)updateParams:(id)sender;
 - (prefParams *)params;
 
@@ -62,6 +69,6 @@ typedef struct {
 @property (assign) IBOutlet NSSlider *updateFreqSlider;
 @property (assign) IBOutlet NSTextField *widthTField;
 @property (assign) IBOutlet NSTextField *delayTField;
-@property (assign) IBOutlet NSTextField *sepStrTField;
+@property (assign) IBOutlet NSMatrix *rotModeMatrix;
 
 @end
