@@ -34,6 +34,7 @@
 #define TEXTHEIGHT 0.0
 #define FONTNAME @"Geneva"
 #define FONTSIZE 9.0
+#define SECONDDELAYTIME 3.0
 
 @implementation rotatingBanner
 
@@ -150,7 +151,7 @@
           [rotationTimer invalidate];
           state = SECOND_DELAY;
           [delayTimer release];
-          delayTimer = [NSTimer scheduledTimerWithTimeInterval:delay
+          delayTimer = [NSTimer scheduledTimerWithTimeInterval:SECONDDELAYTIME
                                                         target:self
                                                       selector:@selector(finishedDelay:)
                                                       userInfo:nil
@@ -187,7 +188,7 @@
         [rotationTimer invalidate];
         state = SECOND_DELAY;
         [delayTimer release];
-        delayTimer = [NSTimer scheduledTimerWithTimeInterval:delay
+        delayTimer = [NSTimer scheduledTimerWithTimeInterval:SECONDDELAYTIME
                                                       target:self
                                                     selector:@selector(finishedDelay:)
                                                     userInfo:nil

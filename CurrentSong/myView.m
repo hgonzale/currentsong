@@ -75,7 +75,7 @@
   play = [NSBezierPath bezierPath];
   [play moveToPoint:NSMakePoint(0, 12)];
   [play lineToPoint:NSMakePoint(0, 20)];
-  [play lineToPoint:NSMakePoint(7, 16)];
+  [play lineToPoint:NSMakePoint(8, 16)];
   [play closePath];
   [play setLineWidth:1.0];
   [play retain];
