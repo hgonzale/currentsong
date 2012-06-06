@@ -33,7 +33,7 @@
 #define ROTATESEP 25.0
 #define TEXTHEIGHT 0.0
 #define FONTNAME @"Geneva"
-#define FONTSIZE 9.0
+#define FONTSIZE 9.5
 #define SECONDDELAYTIME 3.0
 
 @implementation rotatingBanner
@@ -61,6 +61,7 @@
   
   fontAttr = [NSMutableDictionary dictionaryWithObjectsAndKeys:
               [NSFont fontWithName:FONTNAME size:FONTSIZE], 
+              //[NSFont menuBarFontOfSize:FONTSIZE],
               NSFontAttributeName, 
               [NSColor textColor],
               NSForegroundColorAttributeName,
@@ -90,6 +91,8 @@
 
 - (void)updateParams:(prefParams *)params
 {
+  CGFloat frameLength = [self bounds].size.width; // The frame was updated by owner.
+  
   updateFreq = params->updateFreq;
   delay = params->delay;
   if( mode != params->mode )
@@ -98,6 +101,18 @@
     stringReachedEnd = NO;
   }
   mode = params->mode;
+    
+  if( frameLength >= length ) // Do nothing, we don't need to rotate.
+  {
+    state = INACTIVE;
+    [rotationTimer invalidate];
+    [delayTimer invalidate];
+
+    bias = 0.0;
+    stringReachedEnd = NO;
+    
+    [self setNeedsDisplay:YES];
+  }
   
   if( state == ROTATING )
   {

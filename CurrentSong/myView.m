@@ -32,6 +32,7 @@
 #define SYMBOLLENGTH 10.0
 #define TOPHEIGHT 10.0
 #define BOTTOMHEIGHT 0.0
+#define MARGINSIZE 1.0
 #define SYMBOLCOLOR blackColor
 #define SEPARATOR @" — "
 #define STRNOTRUNNING @"iTunes is not running"
@@ -62,30 +63,36 @@
   state = NOTRUNNING;
 
   stop = [NSBezierPath bezierPath];
-  [stop appendBezierPathWithRect:NSMakeRect(0, 12, 8, 8)];
+  [stop appendBezierPathWithRect:NSMakeRect( MARGINSIZE, 12, 8+MARGINSIZE, 8 )];
   [stop setLineWidth:1.0];
   [stop retain];
   
   pause = [NSBezierPath bezierPath];
-  [pause appendBezierPathWithRect:NSMakeRect(0, 12, 3, 8)];
-  [pause appendBezierPathWithRect:NSMakeRect(5, 12, 3, 8)];
+  [pause appendBezierPathWithRect:NSMakeRect( MARGINSIZE, 12, 3+MARGINSIZE, 8)];
+  [pause appendBezierPathWithRect:NSMakeRect( 5+MARGINSIZE, 12, 3+MARGINSIZE, 8)];
   [pause setLineWidth:1.0];
   [pause retain];
   
   play = [NSBezierPath bezierPath];
-  [play moveToPoint:NSMakePoint(0, 12)];
-  [play lineToPoint:NSMakePoint(0, 20)];
-  [play lineToPoint:NSMakePoint(8, 16)];
+  [play moveToPoint:NSMakePoint( MARGINSIZE, 12 )];
+  [play lineToPoint:NSMakePoint( MARGINSIZE, 20 )];
+  [play lineToPoint:NSMakePoint( 8+MARGINSIZE, 16 )];
   [play closePath];
   [play setLineWidth:1.0];
   [play retain];
 
-  top = [[rotatingBanner alloc] initWithFrame:NSMakeRect( SYMBOLLENGTH, TOPHEIGHT, [self bounds].size.width - SYMBOLLENGTH, bannerHeight ) 
+  top = [[rotatingBanner alloc] initWithFrame:NSMakeRect(SYMBOLLENGTH + MARGINSIZE, 
+                                                         TOPHEIGHT, 
+                                                         [self bounds].size.width - SYMBOLLENGTH - 2.0 * MARGINSIZE, 
+                                                         bannerHeight ) 
                                      andOwner:self
                                     andParams:params];
   [top retain];
   
-  bottom = [[rotatingBanner alloc] initWithFrame:NSMakeRect( 0.0, BOTTOMHEIGHT, [self bounds].size.width, bannerHeight ) 
+  bottom = [[rotatingBanner alloc] initWithFrame:NSMakeRect(MARGINSIZE, 
+                                                            BOTTOMHEIGHT, 
+                                                            [self bounds].size.width - 2.0 * MARGINSIZE, 
+                                                            bannerHeight ) 
                                         andOwner:self
                                        andParams:params];
   [bottom retain];
@@ -232,11 +239,23 @@
 {
   CGFloat bannerHeight = 0.5 * [[NSStatusBar systemStatusBar] thickness];
 
-  [top setFrame:NSMakeRect( SYMBOLLENGTH, TOPHEIGHT, [self bounds].size.width - SYMBOLLENGTH, bannerHeight )];
-  [bottom setFrame:NSMakeRect( 0.0, BOTTOMHEIGHT, [self bounds].size.width, bannerHeight )];
+  [top setFrame:NSMakeRect(SYMBOLLENGTH + MARGINSIZE, 
+                           TOPHEIGHT, 
+                           [self bounds].size.width - SYMBOLLENGTH - 2.0 * MARGINSIZE, 
+                           bannerHeight )];
+  [bottom setFrame:NSMakeRect(MARGINSIZE, 
+                              BOTTOMHEIGHT, 
+                              [self bounds].size.width - 2.0 * MARGINSIZE, 
+                              bannerHeight )];
   
   [top updateParams:params];
   [bottom updateParams:params];
+  
+  if( ![top isActive] && ![bottom isActive] )
+  {
+    [top startDelayAndRotate];
+    [bottom startDelayAndRotate];
+  }
 }
 
 - (void)dealloc
