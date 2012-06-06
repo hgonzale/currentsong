@@ -63,13 +63,13 @@
   state = NOTRUNNING;
 
   stop = [NSBezierPath bezierPath];
-  [stop appendBezierPathWithRect:NSMakeRect( MARGINSIZE, 12, 8+MARGINSIZE, 8 )];
+  [stop appendBezierPathWithRect:NSMakeRect( MARGINSIZE, 12, 8, 8 )];
   [stop setLineWidth:1.0];
   [stop retain];
   
   pause = [NSBezierPath bezierPath];
-  [pause appendBezierPathWithRect:NSMakeRect( MARGINSIZE, 12, 3+MARGINSIZE, 8)];
-  [pause appendBezierPathWithRect:NSMakeRect( 5+MARGINSIZE, 12, 3+MARGINSIZE, 8)];
+  [pause appendBezierPathWithRect:NSMakeRect( MARGINSIZE, 12, 3, 8)];
+  [pause appendBezierPathWithRect:NSMakeRect( 5+MARGINSIZE, 12, 3, 8)];
   [pause setLineWidth:1.0];
   [pause retain];
   
