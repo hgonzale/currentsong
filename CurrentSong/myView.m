@@ -115,17 +115,17 @@
   [album autorelease];
 
   if( theName == nil || [theName length] == 0 )
-    name = [NSString stringWithString:STRNOTRACK];
+    name = STRNOTRACK;
   else
     name = [theName retain];
   
   if( theArtist == nil )
-    artist = [NSString stringWithString:@""];
+    artist = @"";
   else
     artist = [theArtist retain];
   
   if( theAlbum == nil )
-    album = [NSString stringWithString:@""];
+    album = @"";
   else
     album = [theAlbum retain];
   
