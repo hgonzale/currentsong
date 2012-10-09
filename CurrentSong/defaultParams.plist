@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>updateFreq</key>
+	<real>7.3</real>
+	<key>width</key>
+	<integer>100</integer>
+	<key>delay</key>
+	<integer>15</integer>
+	<key>rotMode</key>
+	<integer>0</integer>
+</dict>
+</plist>

@@ -29,12 +29,10 @@
 
 #import <Foundation/Foundation.h>
 
-#define CONFIGFILENAME @"csparams.data"
-
 typedef enum {
-  HORIZONTAL_CONT = 1,
-  HORIZONTAL_REV = 2,
-  VERTICAL = 3
+  HORIZONTAL_CONT = 0,
+  HORIZONTAL_REV = 1,
+  VERTICAL = 2
 } rotationMode;
 
 typedef struct {
@@ -52,23 +50,14 @@ typedef struct {
   id <hasUpdateParams> owner;
   
   NSWindow *prefWindow;
-  NSSlider *updateFreqSlider;
-  NSTextField *widthTField;
-  NSTextField *delayTField;
-  NSMatrix *rotModeMatrix;
 
   prefParams params;
 }
 
 - (id)initWithOwner:(id)myowner;
-- (void)saveParams;
 - (IBAction)updateParams:(id)sender;
 - (prefParams *)params;
 
 @property (assign) IBOutlet NSWindow *prefWindow;
-@property (assign) IBOutlet NSSlider *updateFreqSlider;
-@property (assign) IBOutlet NSTextField *widthTField;
-@property (assign) IBOutlet NSTextField *delayTField;
-@property (assign) IBOutlet NSMatrix *rotModeMatrix;
 
 @end

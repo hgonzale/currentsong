@@ -29,10 +29,10 @@
 
 #import "rotatingBanner.h"
 
-#define BIASINC -1.0
+#define TIMERPERIOD 1.0/20.0 // Run the refresh at 20 Hz. Too fast would mean too much CPU.
 #define ROTATESEP 25.0
 #define TEXTHEIGHT 0.0
-#define FONTNAME @"Geneva"
+#define FONTNAME @"Helvetica Neue"
 #define FONTSIZE 9.5
 #define SECONDDELAYTIME 3.0
 
@@ -60,9 +60,9 @@
   stringReachedEnd = NO;
   
   fontAttr = [NSMutableDictionary dictionaryWithObjectsAndKeys:
-              [NSFont fontWithName:FONTNAME size:FONTSIZE], 
+              [NSFont fontWithName:FONTNAME size:FONTSIZE],
               //[NSFont menuBarFontOfSize:FONTSIZE],
-              NSFontAttributeName, 
+              NSFontAttributeName,
               [NSColor textColor],
               NSForegroundColorAttributeName,
               nil];
@@ -118,7 +118,7 @@
   {
     [rotationTimer invalidate];
     [rotationTimer release];
-    rotationTimer = [NSTimer scheduledTimerWithTimeInterval:1.0/updateFreq
+    rotationTimer = [NSTimer scheduledTimerWithTimeInterval:TIMERPERIOD
                                                      target:self
                                                    selector:@selector(updateBias:)
                                                    userInfo:nil
@@ -130,6 +130,7 @@
 - (void)updateBias:(NSTimer *)sender
 {
   CGFloat frameLength = [self bounds].size.width;
+  CGFloat biasInc = round( updateFreq/TIMERPERIOD * 4.0 ) / 4.0; // 1/4 of pixel is enough granularity for the Retina display.
   
   // Every now and then a timer keeps running for no apparent reason. This condition kills those timers.
   if( state != ROTATING )
@@ -142,7 +143,7 @@
   switch( mode )
   {
     case HORIZONTAL_CONT:
-      bias += BIASINC;
+      bias -= biasInc;
       [self setNeedsDisplay:YES];
 
       if( bias + ROTATESEP + length <= 0.0 ) // Exit condition
@@ -157,7 +158,7 @@
     case HORIZONTAL_REV:
       if( !stringReachedEnd )
       {
-        bias += BIASINC;
+        bias -= biasInc;
         [self setNeedsDisplay:YES];
         if( bias + length <= frameLength )
         {
@@ -176,7 +177,7 @@
       }
       else
       {
-        bias -= BIASINC;
+        bias += biasInc;
         [self setNeedsDisplay:YES];
         if( bias >= 0.0 )
         {
@@ -191,7 +192,7 @@
       break;
       
     case VERTICAL:
-      bias += BIASINC;
+      bias -= biasInc;
       [self setNeedsDisplay:YES];
       
       if( !stringReachedEnd &&

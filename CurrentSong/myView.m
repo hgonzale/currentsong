@@ -30,7 +30,7 @@
 #import "myView.h"
 
 #define SYMBOLLENGTH 10.0
-#define TOPHEIGHT 10.0
+#define TOPHEIGHT ( 0.5 * [[NSStatusBar systemStatusBar] thickness] )
 #define BOTTOMHEIGHT 0.0
 #define MARGINSIZE 1.0
 #define SYMBOLCOLOR blackColor
@@ -63,20 +63,20 @@
   state = NOTRUNNING;
 
   stop = [NSBezierPath bezierPath];
-  [stop appendBezierPathWithRect:NSMakeRect( MARGINSIZE, 12, 8, 8 )];
+  [stop appendBezierPathWithRect:NSMakeRect( MARGINSIZE, TOPHEIGHT + 1.5, 8.5, 8.5 )];
   [stop setLineWidth:1.0];
   [stop retain];
   
   pause = [NSBezierPath bezierPath];
-  [pause appendBezierPathWithRect:NSMakeRect( MARGINSIZE, 12, 3, 8)];
-  [pause appendBezierPathWithRect:NSMakeRect( 5+MARGINSIZE, 12, 3, 8)];
+  [pause appendBezierPathWithRect:NSMakeRect( MARGINSIZE, TOPHEIGHT + 1.5, 3.5, 8.5)];
+  [pause appendBezierPathWithRect:NSMakeRect( MARGINSIZE + 5, TOPHEIGHT + 1.5, 3.5, 8.5)];
   [pause setLineWidth:1.0];
   [pause retain];
   
   play = [NSBezierPath bezierPath];
-  [play moveToPoint:NSMakePoint( MARGINSIZE, 12 )];
-  [play lineToPoint:NSMakePoint( MARGINSIZE, 20 )];
-  [play lineToPoint:NSMakePoint( 8+MARGINSIZE, 16 )];
+  [play moveToPoint:NSMakePoint( MARGINSIZE, TOPHEIGHT + 1.5 )];
+  [play lineToPoint:NSMakePoint( MARGINSIZE, TOPHEIGHT + 10 )];
+  [play lineToPoint:NSMakePoint( 8+MARGINSIZE, TOPHEIGHT + 5.75 )];
   [play closePath];
   [play setLineWidth:1.0];
   [play retain];
