@@ -10,6 +10,7 @@
 		0A42C8B71549232400580F05 /* myView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A42C8B61549232400580F05 /* myView.m */; };
 		0A452F9F156999570069DB31 /* prefMgr.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A452F9E156999570069DB31 /* prefMgr.m */; };
 		0A452FA9156A27420069DB31 /* statusMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0A452FA8156A27420069DB31 /* statusMenu.xib */; };
+		0AA283CE1623DE4E00A27F9D /* defaultParams.plist in Resources */ = {isa = PBXBuildFile; fileRef = 0AA283CD1623DE4E00A27F9D /* defaultParams.plist */; };
 		0AAC5CBE1539515700F9558D /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0AAC5CBD1539515700F9558D /* Cocoa.framework */; };
 		0AAC5CC81539515700F9558D /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 0AAC5CC61539515700F9558D /* InfoPlist.strings */; };
 		0AAC5CCA1539515700F9558D /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 0AAC5CC91539515700F9558D /* main.m */; };
@@ -29,6 +30,7 @@
 		0A452F9E156999570069DB31 /* prefMgr.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = prefMgr.m; sourceTree = "<group>"; };
 		0A452FA8156A27420069DB31 /* statusMenu.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = statusMenu.xib; sourceTree = "<group>"; };
 		0A72CB5515571F38003BC5AB /* iTunes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = iTunes.h; sourceTree = "<group>"; };
+		0AA283CD1623DE4E00A27F9D /* defaultParams.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = defaultParams.plist; sourceTree = "<group>"; };
 		0AAC5CB91539515700F9558D /* CurrentSong.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CurrentSong.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		0AAC5CBD1539515700F9558D /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		0AAC5CC01539515700F9558D /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
@@ -131,6 +133,7 @@
 				0AAC5CC91539515700F9558D /* main.m */,
 				0AAC5CCB1539515700F9558D /* CurrentSong-Prefix.pch */,
 				0ACD27DF155E2D170028BADD /* copyright.rtf */,
+				0AA283CD1623DE4E00A27F9D /* defaultParams.plist */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -191,6 +194,7 @@
 				0ACD27E0155E2D170028BADD /* copyright.rtf in Resources */,
 				0ACD27E2155E32D90028BADD /* prefWindow.xib in Resources */,
 				0A452FA9156A27420069DB31 /* statusMenu.xib in Resources */,
+				0AA283CE1623DE4E00A27F9D /* defaultParams.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

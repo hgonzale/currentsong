@@ -4,7 +4,6 @@
 //
 //  Created by Humberto on 04/13/2012.
 //
-//
 //  Copyright (c) 2012, Humberto Gonzalez
 //  All rights reserved.
 //
@@ -124,6 +123,11 @@
                                                   [[NSStatusBar systemStatusBar] thickness])
                               andOwner:self
                              andParams:[preferences params]];
+  if( ![iTunes isRunning] )
+  {
+    [view setState:STOPPED]; // Cheap hack to fix hack when we start CurrentSong and iTunes is not running.
+                             // This way we enter the case in checkItunesRunning to display the "NOTRUNNING" banner.
+  }
   
   [self checkITunesRunning:nil];
   [statusItem setView:view];
@@ -151,9 +155,8 @@
 
 - (void)quitApp
 {
-  [preferences saveParams];
-  
-  [[NSApplication sharedApplication] terminate:nil]; 
+  [[NSUserDefaults standardUserDefaults] synchronize];
+  [[NSApplication sharedApplication] terminate:nil];
 }
 
 - (void)dealloc

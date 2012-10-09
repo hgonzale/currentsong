@@ -71,6 +71,6 @@ typedef enum {
 - (void)updateParams:(prefParams *)params;
 - (void)didFinishRotating:(id)sender;
 
-@property (readonly) iTunesState state;
+@property iTunesState state;
 
 @end

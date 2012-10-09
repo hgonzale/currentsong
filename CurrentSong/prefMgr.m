@@ -32,86 +32,35 @@
 @implementation prefMgr
 
 @synthesize prefWindow;
-@synthesize updateFreqSlider;
-@synthesize widthTField;
-@synthesize delayTField;
-@synthesize rotModeMatrix;
 
 - (id)initWithOwner:(id <hasUpdateParams>)myowner
 {
-  int dummy;
-  
   self = [super init];
   
   owner = myowner;
   
   [NSBundle loadNibNamed:@"prefWindow" owner:self];
-  
-  NSString *configPath = [[[NSBundle mainBundle] resourcePath] stringByAppendingPathComponent:CONFIGFILENAME];
-  if( [[NSFileManager defaultManager] fileExistsAtPath:configPath] )
-  {
-    NSData *data = [NSData dataWithContentsOfFile:configPath];
-    NSKeyedUnarchiver *unarchiver = [[NSKeyedUnarchiver alloc] initForReadingWithData:data];
-    
-    params.updateFreq = [unarchiver decodeDoubleForKey:@"updateFreq"];
-    if( params.updateFreq == 0.0 ) // Sets default value if not found among params
-      params.updateFreq = [updateFreqSlider doubleValue];
-    
-    params.width = [unarchiver decodeDoubleForKey:@"width"];
-    if( params.width == 0.0 ) // Sets default value if not found among params
-      params.width = [widthTField doubleValue];      
-    
-    params.delay = [unarchiver decodeDoubleForKey:@"delay"];
-    if( params.delay == 0.0 ) // Sets default value if not found among params
-      params.delay = [delayTField doubleValue];
-    
-    dummy = [unarchiver decodeIntForKey:@"mode"];
-    if( dummy == 0 ) // Sets default value if not found among params
-      params.mode = [rotModeMatrix selectedRow] + 1;
-    else
-      params.mode = dummy;
-    
-    [unarchiver finishDecoding];
-    [unarchiver release];    
 
-    [updateFreqSlider setDoubleValue:params.updateFreq];
-    [widthTField setDoubleValue:params.width];
-    [delayTField setDoubleValue:params.delay];
-    [rotModeMatrix selectCellAtRow:(params.mode-1) column:0];
-  }
-  else
-  {
-    // NSLog( @"No parameters file found, using defaults." );
-    params.updateFreq = [updateFreqSlider doubleValue];
-    params.width = [widthTField doubleValue];
-    params.delay = [delayTField doubleValue];
-    params.mode = [rotModeMatrix selectedRow] + 1;
-  }
+  NSDictionary *defaultParams = [NSDictionary dictionaryWithContentsOfFile:
+                                 [[NSBundle mainBundle] pathForResource:@"defaultParams"
+                                                                 ofType:@"plist"]];
+  [[NSUserDefaults standardUserDefaults] registerDefaults:defaultParams];
+  [[NSUserDefaultsController sharedUserDefaultsController] setInitialValues:defaultParams];
+  
+  params.updateFreq = [[NSUserDefaults standardUserDefaults] floatForKey:@"updateFreq"];
+  params.width = [[NSUserDefaults standardUserDefaults] floatForKey:@"width"];
+  params.delay = [[NSUserDefaults standardUserDefaults] floatForKey:@"delay"];
+  params.mode = (rotationMode)[[NSUserDefaults standardUserDefaults] integerForKey:@"rotMode"];
 
   return self;
 }
 
-- (void)saveParams
-{
-  NSMutableData *data = [NSMutableData data];
-  NSKeyedArchiver *archiver = [[NSKeyedArchiver alloc] initForWritingWithMutableData:data];;
-  NSString *configPath = [[[NSBundle mainBundle] resourcePath] stringByAppendingPathComponent:CONFIGFILENAME];
-  
-  [archiver encodeDouble:params.updateFreq forKey:@"updateFreq"];
-  [archiver encodeDouble:params.width forKey:@"width"];
-  [archiver encodeDouble:params.delay forKey:@"delay"];
-  [archiver encodeInt:params.mode forKey:@"mode"];
-  [archiver finishEncoding];
-  [data writeToFile:configPath atomically:YES];
-  [archiver release];
-}
-
 - (IBAction)updateParams:(id)sender
 {
-  params.updateFreq = [updateFreqSlider doubleValue];
-  params.width = [widthTField integerValue];
-  params.delay = [delayTField doubleValue];
-  params.mode = [rotModeMatrix selectedRow] + 1;
+  params.updateFreq = [[NSUserDefaults standardUserDefaults] floatForKey:@"updateFreq"];
+  params.width = [[NSUserDefaults standardUserDefaults] floatForKey:@"width"];
+  params.delay = [[NSUserDefaults standardUserDefaults] floatForKey:@"delay"];
+  params.mode = (rotationMode)[[NSUserDefaults standardUserDefaults] integerForKey:@"rotMode"];
   
   [owner updateParams:&params];
 
