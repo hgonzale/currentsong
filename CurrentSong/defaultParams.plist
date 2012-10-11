@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>updateFreq</key>
-	<real>7.3</real>
+	<integer>12</integer>
 	<key>width</key>
 	<integer>100</integer>
 	<key>delay</key>

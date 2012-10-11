@@ -29,7 +29,7 @@
 
 #import "rotatingBanner.h"
 
-#define TIMERPERIOD 1.0/20.0 // Run the refresh at 20 Hz. Too fast would mean too much CPU.
+#define PREFEREDFREQ 18 // We choose biasInc and timerPeriod to try to match this number.
 #define ROTATESEP 25.0
 #define TEXTHEIGHT 0.0
 #define FONTNAME @"Helvetica Neue"
@@ -95,13 +95,25 @@
   
   updateFreq = params->updateFreq;
   delay = params->delay;
+
+  // Choose between biasInc = 0.5 and biasInc = 1.0, whichever gives us a freq closer to PREFEREDFREQ
+  if( PREFEREDFREQ >= 0.75 * updateFreq ) // magic, I did the math.
+  {
+    biasInc = 0.5;
+  }
+  else
+  {
+    biasInc = 1.0;
+  }
+  timerPeriod = biasInc / updateFreq;
+  
   if( mode != params->mode )
   {
     bias = 0.0;
     stringReachedEnd = NO;
   }
   mode = params->mode;
-    
+  
   if( frameLength >= length ) // Do nothing, we don't need to rotate.
   {
     state = INACTIVE;
@@ -118,19 +130,20 @@
   {
     [rotationTimer invalidate];
     [rotationTimer release];
-    rotationTimer = [NSTimer scheduledTimerWithTimeInterval:TIMERPERIOD
+    rotationTimer = [NSTimer scheduledTimerWithTimeInterval:timerPeriod
                                                      target:self
                                                    selector:@selector(updateBias:)
                                                    userInfo:nil
                                                     repeats:YES];
     [rotationTimer retain];    
   }
+  
+  // NSLog( @"biasInc = %f, timerPeriod = %f\n", biasInc, timerPeriod );
 }
 
 - (void)updateBias:(NSTimer *)sender
 {
   CGFloat frameLength = [self bounds].size.width;
-  CGFloat biasInc = round( updateFreq/TIMERPERIOD * 4.0 ) / 4.0; // 1/4 of pixel is enough granularity for the Retina display.
   
   // Every now and then a timer keeps running for no apparent reason. This condition kills those timers.
   if( state != ROTATING )

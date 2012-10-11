@@ -60,6 +60,9 @@ typedef enum {
   double updateFreq;
   double delay;
   
+  double biasInc;
+  double timerPeriod;
+  
   BOOL stringReachedEnd;
 }
 
