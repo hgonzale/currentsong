@@ -29,6 +29,7 @@
 
 #import "AppDelegate.h"
 #define ITUNESRUNNINGINTERVAL 5.0
+#define ITUNESTOLERANCE 4.0
 
 @implementation AppDelegate
 
@@ -142,10 +143,12 @@
                                                       selector:@selector(checkITunesRunning:)
                                                       userInfo:nil
                                                        repeats:YES];
+  [timerITunesRunning setTolerance:ITUNESTOLERANCE];
 
-  [NSBundle loadNibNamed:@"aboutWindow" owner:self];
-  [NSBundle loadNibNamed:@"statusMenu" owner:self];
-  
+  [[NSBundle mainBundle] loadNibNamed:@"aboutWindow" owner:self topLevelObjects:NULL];
+  [aboutWindow retain];
+  [[NSBundle mainBundle] loadNibNamed:@"statusMenu" owner:self topLevelObjects:NULL];
+  [menu retain];
   [menu setDelegate:view];
   
   // Make sure that the windows come to the front when activated.
@@ -165,6 +168,8 @@
   [preferences release];
   [iTunes release];
   [statusItem release];
+  [menu release];
+  [aboutWindow release];
   [super dealloc];
 }
 

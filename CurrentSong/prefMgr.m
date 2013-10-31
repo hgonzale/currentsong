@@ -39,7 +39,8 @@
   
   owner = myowner;
   
-  [NSBundle loadNibNamed:@"prefWindow" owner:self];
+  [[NSBundle mainBundle] loadNibNamed:@"prefWindow" owner:self topLevelObjects:NULL];
+  [prefWindow retain];
 
   NSDictionary *defaultParams = [NSDictionary dictionaryWithContentsOfFile:
                                  [[NSBundle mainBundle] pathForResource:@"defaultParams"
@@ -75,6 +76,7 @@
 
 - (void)dealloc
 {
+  [prefWindow release];
   [super dealloc];
 }
 

@@ -29,11 +29,11 @@
 
 #import "rotatingBanner.h"
 
-#define PREFEREDFREQ 18 // We choose biasInc and timerPeriod to try to match this number.
+#define PREFEREDFREQ 12.0 // We choose biasInc and timerPeriod to try to match this number.
 #define ROTATESEP 25.0
 #define TEXTHEIGHT 0.0
 #define FONTNAME @"Helvetica Neue"
-#define FONTSIZE 9.5
+#define FONTSIZE 10.0
 #define SECONDDELAYTIME 3.0
 
 @implementation rotatingBanner
@@ -96,15 +96,17 @@
   updateFreq = params->updateFreq;
   delay = params->delay;
 
-  // Choose between biasInc = 0.5 and biasInc = 1.0, whichever gives us a freq closer to PREFEREDFREQ
-  if( PREFEREDFREQ >= 0.75 * updateFreq ) // magic, I did the math.
+  if( [[NSScreen mainScreen] respondsToSelector:@selector(backingScaleFactor)] )
   {
-    biasInc = 0.5;
+    // Set biasInc to match the granularity of the screen (Retina display, I'm looking at you).
+    biasInc = 1.0/[[NSScreen mainScreen] backingScaleFactor];
+    // Double biasInc if we are updating too fast.
+    if( PREFEREDFREQ < 0.75 * updateFreq ) // Optimal strategy. Math: it works, bitches.
+      biasInc *= 2.0;
   }
   else
-  {
     biasInc = 1.0;
-  }
+
   timerPeriod = biasInc / updateFreq;
   
   if( mode != params->mode )
@@ -135,10 +137,11 @@
                                                    selector:@selector(updateBias:)
                                                    userInfo:nil
                                                     repeats:YES];
+    [rotationTimer setTolerance:timerPeriod]; // We are pretty tolerant.
     [rotationTimer retain];    
   }
   
-  // NSLog( @"biasInc = %f, timerPeriod = %f\n", biasInc, timerPeriod );
+  NSLog( @"biasInc = %f, updateFreq = %f, timerPeriod = %f\n", biasInc, updateFreq, timerPeriod );
 }
 
 - (void)updateBias:(NSTimer *)sender
@@ -185,6 +188,7 @@
                                                       selector:@selector(finishedDelay:)
                                                       userInfo:nil
                                                        repeats:NO];
+          [delayTimer setTolerance:5.0*SECONDDELAYTIME];
           [delayTimer retain];
         }
       }
@@ -222,6 +226,7 @@
                                                     selector:@selector(finishedDelay:)
                                                     userInfo:nil
                                                      repeats:NO];
+        [delayTimer setTolerance:5.0*SECONDDELAYTIME];
         [delayTimer retain];
       }
       
@@ -264,6 +269,7 @@
                                                   selector:@selector(finishedDelay:)
                                                   userInfo:nil
                                                    repeats:NO];
+      [delayTimer setTolerance:5.0*delay];
       [delayTimer retain];
       break;
     case DELAY:
@@ -291,11 +297,12 @@
   }
   
   [rotationTimer release];
-  rotationTimer = [NSTimer scheduledTimerWithTimeInterval:1.0/updateFreq
+  rotationTimer = [NSTimer scheduledTimerWithTimeInterval:timerPeriod
                                            target:self
                                          selector:@selector(updateBias:)
                                          userInfo:nil
                                           repeats:YES];
+  [rotationTimer setTolerance:timerPeriod];
   [rotationTimer retain];
   
   state = ROTATING;
