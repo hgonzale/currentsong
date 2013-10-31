@@ -96,19 +96,6 @@
   updateFreq = params->updateFreq;
   delay = params->delay;
 
-  if( [[NSScreen mainScreen] respondsToSelector:@selector(backingScaleFactor)] )
-  {
-    // Set biasInc to match the granularity of the screen (Retina display, I'm looking at you).
-    biasInc = 1.0/[[NSScreen mainScreen] backingScaleFactor];
-    // Double biasInc if we are updating too fast.
-    if( PREFEREDFREQ < 0.75 * updateFreq ) // Optimal strategy. Math: it works, bitches.
-      biasInc *= 2.0;
-  }
-  else
-    biasInc = 1.0;
-
-  timerPeriod = biasInc / updateFreq;
-  
   if( mode != params->mode )
   {
     bias = 0.0;
@@ -130,6 +117,8 @@
   
   if( state == ROTATING )
   {
+    [self updateBiasInc];
+    
     [rotationTimer invalidate];
     [rotationTimer release];
     rotationTimer = [NSTimer scheduledTimerWithTimeInterval:timerPeriod
@@ -140,8 +129,24 @@
     [rotationTimer setTolerance:timerPeriod]; // We are pretty tolerant.
     [rotationTimer retain];    
   }
-  
-  NSLog( @"biasInc = %f, updateFreq = %f, timerPeriod = %f\n", biasInc, updateFreq, timerPeriod );
+}
+
+- (void)updateBiasInc
+{
+  if( [[NSScreen mainScreen] respondsToSelector:@selector(backingScaleFactor)] )
+  {
+    // Set biasInc to match the granularity of the screen (Retina display, I'm looking at you).
+    biasInc = 1.0/[[NSScreen mainScreen] backingScaleFactor];
+    // Double biasInc if we are updating too fast.
+    if( PREFEREDFREQ < 0.75 * updateFreq ) // Optimal strategy. Math: it works, bitches.
+      biasInc *= 2.0;
+  }
+  else
+    biasInc = 1.0; // Use vanilla biasInc
+
+  timerPeriod = biasInc / updateFreq;
+
+  // NSLog( @"biasInc = %f, updateFreq = %f, timerPeriod = %f\n", biasInc, updateFreq, timerPeriod );
 }
 
 - (void)updateBias:(NSTimer *)sender
@@ -257,6 +262,8 @@
     return;
   }
   
+  [self updateBiasInc]; // Cheap hack. Update the parameters every now and then if we switched between Retina and non-Retina screens.
+  
   switch( state )
   {
     case ROTATING:
@@ -319,8 +326,7 @@
 - (void)drawRect:(NSRect)dirtyRect
 {
   CGFloat frameLength = [self bounds].size.width;
-  
-  
+
   switch( mode )
   {
     case HORIZONTAL_CONT:
