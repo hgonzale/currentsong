@@ -29,7 +29,7 @@
 
 #import "rotatingBanner.h"
 
-#define PREFEREDFREQ 12.0 // We choose biasInc and timerPeriod to try to match this number.
+#define PREFEREDFREQ 25.0 // We choose biasInc and timerPeriod to try to match this refresh frequency.
 #define ROTATESEP 25.0
 #define TEXTHEIGHT 0.0
 #define FONTNAME @"Helvetica Neue"
@@ -114,10 +114,11 @@
     
     [self setNeedsDisplay:YES];
   }
+
+  [self updateBiasInc];
   
   if( state == ROTATING )
   {
-    [self updateBiasInc];
     
     [rotationTimer invalidate];
     [rotationTimer release];
@@ -137,8 +138,9 @@
   {
     // Set biasInc to match the granularity of the screen (Retina display, I'm looking at you).
     biasInc = 1.0/[[NSScreen mainScreen] backingScaleFactor];
+    
     // Double biasInc if we are updating too fast.
-    if( PREFEREDFREQ < 0.75 * updateFreq ) // Optimal strategy. Math: it works, bitches.
+    if( PREFEREDFREQ < 0.75 / biasInc * updateFreq ) // Magic number. Simply cut the error in two at the critical frequency.
       biasInc *= 2.0;
   }
   else
@@ -262,7 +264,7 @@
     return;
   }
   
-  [self updateBiasInc]; // Cheap hack. Update the parameters every now and then if we switched between Retina and non-Retina screens.
+  // [self updateBiasInc]; // Cheap hack. Update the parameters every now and then if we switched between Retina and non-Retina screens.
   
   switch( state )
   {

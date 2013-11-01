@@ -70,6 +70,7 @@ typedef enum {
        andState:(iTunesState)theState;
 - (void)updateParams:(prefParams *)params;
 - (void)didFinishRotating:(id)sender;
+- (void)viewDidChangeBackingProperties;
 
 @property iTunesState state;
 

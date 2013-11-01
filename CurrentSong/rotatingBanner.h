@@ -72,6 +72,7 @@ typedef enum {
 - (void)startDelayAndRotate;
 - (BOOL)isActive;
 - (void)updateParams:(prefParams *)params;
+- (void)updateBiasInc;
 - (void)setText:(NSString *)myText;
 - (void)setIsClicked:(BOOL)isClicked;
 

@@ -258,6 +258,12 @@
   }
 }
 
+- (void)viewDidChangeBackingProperties
+{
+  [top updateBiasInc];
+  [bottom updateBiasInc];
+}
+
 - (void)dealloc
 {
   [play release];
