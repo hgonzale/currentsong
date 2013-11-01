@@ -264,7 +264,9 @@
     return;
   }
   
-  // [self updateBiasInc]; // Cheap hack. Update the parameters every now and then if we switched between Retina and non-Retina screens.
+  // Cheap hack. Update the parameters every now and then if we switched between Retina and non-Retina screens.
+  // The NSView method viewDidChangeBackingProperties does not trigger changes of mainScreen.
+  [self updateBiasInc];
   
   switch( state )
   {
