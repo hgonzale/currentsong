@@ -33,7 +33,7 @@
 #define ROTATESEP 25.0
 #define TEXTHEIGHT 0.0
 #define FONTNAME @"Helvetica Neue"
-#define FONTSIZE 10.0
+#define FONTSIZE 9.5
 #define SECONDDELAYTIME 3.0
 
 @implementation rotatingBanner
@@ -127,7 +127,7 @@
                                                    selector:@selector(updateBias:)
                                                    userInfo:nil
                                                     repeats:YES];
-    [rotationTimer setTolerance:timerPeriod]; // We are pretty tolerant.
+    [rotationTimer setTolerance:timerPeriod/4]; // We are kind of tolerant.
     [rotationTimer retain];    
   }
 }
